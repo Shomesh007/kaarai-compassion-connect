@@ -29,6 +29,14 @@ const impactCategories = [
         url: "https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=800&auto=format&fit=crop",
         caption: "Happy students with their ID cards",
       },
+      {
+        url: "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=800&auto=format&fit=crop",
+        caption: "Group photo with new ID cards",
+      },
+      {
+        url: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=800&auto=format&fit=crop",
+        caption: "School principal with students",
+      },
     ],
   },
   {
@@ -48,6 +56,14 @@ const impactCategories = [
         url: "https://images.unsplash.com/photo-1591123120675-6f7f1aae0e5b?w=800&auto=format&fit=crop",
         caption: "Families celebrating together",
       },
+      {
+        url: "https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?w=800&auto=format&fit=crop",
+        caption: "Cultural festivities and joy",
+      },
+      {
+        url: "https://images.unsplash.com/photo-1601581987809-a874a81309c9?w=800&auto=format&fit=crop",
+        caption: "Volunteers supporting the event",
+      },
     ],
   },
   {
@@ -66,6 +82,14 @@ const impactCategories = [
       {
         url: "https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?w=800&auto=format&fit=crop",
         caption: "Community care initiatives",
+      },
+      {
+        url: "https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=800&auto=format&fit=crop",
+        caption: "Wellness check-up programs",
+      },
+      {
+        url: "https://images.unsplash.com/photo-1521791136064-7986c2920216?w=800&auto=format&fit=crop",
+        caption: "Providing daily necessities",
       },
     ],
   },
@@ -104,11 +128,11 @@ const Gallery = () => {
                   align: "start",
                   loop: true,
                 }}
-                className="w-full"
+                className="w-full px-4 md:px-0"
               >
                 <CarouselContent className="-ml-2 md:-ml-4">
                   {category.images.map((image, index) => (
-                    <CarouselItem key={index} className="pl-2 md:pl-4 basis-full md:basis-1/2 lg:basis-1/3">
+                    <CarouselItem key={index} className="pl-2 md:pl-4 basis-[85%] sm:basis-1/2 lg:basis-1/3">
                       <Dialog>
                         <DialogTrigger asChild>
                           <Card
@@ -145,8 +169,8 @@ const Gallery = () => {
                     </CarouselItem>
                   ))}
                 </CarouselContent>
-                <CarouselPrevious className="hidden md:flex" />
-                <CarouselNext className="hidden md:flex" />
+                <CarouselPrevious className="-left-4 md:-left-12" />
+                <CarouselNext className="-right-4 md:-right-12" />
               </Carousel>
             </div>
           ))}
