@@ -1,13 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTrigger, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
+  type CarouselApi,
 } from "@/components/ui/carousel";
 import { ChevronDown, ChevronUp } from "lucide-react";
 
@@ -17,53 +18,21 @@ const impactCategories = [
     title: "ID Cards for Government School Students",
     description: "Empowering students with identity and dignity",
     images: [
-      {
-        url: "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=800&auto=format&fit=crop",
-        caption: "Students receiving their new ID cards",
-      },
-      {
-        url: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800&auto=format&fit=crop",
-        caption: "Distribution ceremony at local school",
-      },
-      {
-        url: "https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=800&auto=format&fit=crop",
-        caption: "Happy students with their ID cards",
-      },
-      {
-        url: "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=800&auto=format&fit=crop",
-        caption: "Group photo with new ID cards",
-      },
-      {
-        url: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=800&auto=format&fit=crop",
-        caption: "School principal with students",
-      },
+      { url: "/img/id1.jpg", caption: "ID card front example — student photo and details" },
+      { url: "/img/id2.jpg", caption: "ID card back example — school & contact info" },
+      { url: "/img/id3.jpg", caption: "Printed sample attached to lanyard" },
+      { url: "/img/id4.jpg", caption: "Batch of ID cards ready for distribution" },
     ],
   },
   {
     id: 2,
-    title: "Supporting Girls Through Coming-of-Age Ceremonies",
-    description: "Celebrating milestones with dignity and care",
+    title: "School Bags for Children in Need",
+    description: "Providing school bags and supplies to help children attend school",
     images: [
-      {
-        url: "https://images.unsplash.com/photo-1516534775068-ba3e7458af70?w=800&auto=format&fit=crop",
-        caption: "Traditional ceremony celebration",
-      },
-      {
-        url: "https://images.unsplash.com/photo-1544027993-37dbfe43562a?w=800&auto=format&fit=crop",
-        caption: "Community gathering for the occasion",
-      },
-      {
-        url: "https://images.unsplash.com/photo-1591123120675-6f7f1aae0e5b?w=800&auto=format&fit=crop",
-        caption: "Families celebrating together",
-      },
-      {
-        url: "https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?w=800&auto=format&fit=crop",
-        caption: "Cultural festivities and joy",
-      },
-      {
-        url: "https://images.unsplash.com/photo-1601581987809-a874a81309c9?w=800&auto=format&fit=crop",
-        caption: "Volunteers supporting the event",
-      },
+      { url: "/img/bag1.jpg", caption: "School bags ready for distribution" },
+      { url: "/img/bag2.jpg", caption: "Volunteers packing school supplies" },
+      { url: "/img/bag3.jpg", caption: "Children receiving school bags" },
+      { url: "/img/bag5.jpg", caption: "Supplies and materials inside the bags" },
     ],
   },
   {
@@ -71,26 +40,11 @@ const impactCategories = [
     title: "Elderly Care & Support",
     description: "Providing essentials and compassion to senior citizens",
     images: [
-      {
-        url: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=800&auto=format&fit=crop",
-        caption: "Healthcare support for elderly",
-      },
-      {
-        url: "https://images.unsplash.com/photo-1581579438747-1dc8d17bbce4?w=800&auto=format&fit=crop",
-        caption: "Distribution of essential supplies",
-      },
-      {
-        url: "https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?w=800&auto=format&fit=crop",
-        caption: "Community care initiatives",
-      },
-      {
-        url: "https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=800&auto=format&fit=crop",
-        caption: "Wellness check-up programs",
-      },
-      {
-        url: "https://images.unsplash.com/photo-1521791136064-7986c2920216?w=800&auto=format&fit=crop",
-        caption: "Providing daily necessities",
-      },
+      { url: "/img/elder1.jpg", caption: "Home visit: health & companionship" },
+      { url: "/img/elder2.jpg", caption: "Distribution of essential supplies to seniors" },
+      { url: "/img/elder3.jpg", caption: "Community care activities for elderly" },
+      { url: "/img/elder4.jpg", caption: "Wellness check-up program in progress" },
+      { url: "/img/elder5.jpg", caption: "Volunteers assisting daily needs" },
     ],
   },
 ];
@@ -100,6 +54,107 @@ const Gallery = () => {
   const [selectedImage, setSelectedImage] = useState<{ url: string; caption: string } | null>(null);
   
   const visibleCategories = isExpanded ? impactCategories : impactCategories.slice(0, 2);
+
+  // Inner component to handle per-category carousel autoplay every 3 seconds.
+  const CategoryCarousel = ({ category }: { category: (typeof impactCategories)[0] }) => {
+    const [api, setApi] = useState<CarouselApi | null>(null);
+    const containerRef = useRef<HTMLDivElement | null>(null);
+    const [isVisible, setIsVisible] = useState(false);
+
+    // Observe whether the carousel wrapper is in viewport. Only autoplay when visible.
+    useEffect(() => {
+      const el = containerRef.current;
+      if (!el || typeof IntersectionObserver === "undefined") return;
+
+      const obs = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => setIsVisible(entry.isIntersecting && entry.intersectionRatio > 0.4));
+        },
+        { threshold: [0, 0.4, 0.75] },
+      );
+
+      obs.observe(el);
+      return () => obs.disconnect();
+    }, []);
+
+    // Autoplay effect: only when api is available and carousel is visible
+    useEffect(() => {
+      if (!api || !isVisible) return;
+
+      const interval = setInterval(() => {
+        try {
+          if (api.canScrollNext && api.canScrollNext()) {
+            api.scrollNext();
+          } else if (api.scrollTo) {
+            api.scrollTo(0);
+          }
+        } catch (e) {
+          // ignore errors
+        }
+      }, 3000);
+
+      return () => clearInterval(interval);
+    }, [api, isVisible]);
+
+    return (
+      <div ref={containerRef}>
+        <Carousel
+          opts={{
+            align: "start",
+            loop: true,
+          }}
+          className="w-full px-4 md:px-0"
+          setApi={(a: CarouselApi) => setApi(a)}
+        >
+        <CarouselContent className="-ml-2 md:-ml-4">
+          {category.images.map((image, index) => (
+            <CarouselItem key={index} className="pl-2 md:pl-4 basis-[85%] sm:basis-1/2 lg:basis-1/3">
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Card
+                    className="overflow-hidden cursor-pointer group border-border hover:shadow-[var(--shadow-hover)] transition-all duration-300"
+                    onClick={() => setSelectedImage(image)}
+                  >
+                    <div className="relative aspect-square">
+                      <img
+                        src={image.url}
+                        alt={image.caption}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                        <p className="text-white text-sm font-medium">
+                          {image.caption}
+                        </p>
+                      </div>
+                    </div>
+                  </Card>
+                </DialogTrigger>
+                <DialogContent className="max-w-lg p-0 bg-background">
+                  <DialogHeader>
+                    <DialogTitle>{image.caption}</DialogTitle>
+                    <DialogDescription>Image preview — click close or outside to dismiss.</DialogDescription>
+                  </DialogHeader>
+                  <div className="relative">
+                    <img
+                      src={image.url}
+                      alt={image.caption}
+                      className="w-full h-auto max-h-[80vh] object-contain"
+                    />
+                    <div className="p-4 bg-card">
+                      <p className="text-sm text-foreground">{image.caption}</p>
+                    </div>
+                  </div>
+                </DialogContent>
+              </Dialog>
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+        <CarouselPrevious className="-left-4 md:-left-12" />
+        <CarouselNext className="-right-4 md:-right-12" />
+        </Carousel>
+      </div>
+    );
+  };
 
   return (
     <section id="gallery" className="py-16 px-4 bg-card">
@@ -123,55 +178,8 @@ const Gallery = () => {
                 </p>
               </div>
 
-              <Carousel
-                opts={{
-                  align: "start",
-                  loop: true,
-                }}
-                className="w-full px-4 md:px-0"
-              >
-                <CarouselContent className="-ml-2 md:-ml-4">
-                  {category.images.map((image, index) => (
-                    <CarouselItem key={index} className="pl-2 md:pl-4 basis-[85%] sm:basis-1/2 lg:basis-1/3">
-                      <Dialog>
-                        <DialogTrigger asChild>
-                          <Card
-                            className="overflow-hidden cursor-pointer group border-border hover:shadow-[var(--shadow-hover)] transition-all duration-300"
-                            onClick={() => setSelectedImage(image)}
-                          >
-                            <div className="relative aspect-square">
-                              <img
-                                src={image.url}
-                                alt={image.caption}
-                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                              />
-                              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
-                                <p className="text-white text-sm font-medium">
-                                  {image.caption}
-                                </p>
-                              </div>
-                            </div>
-                          </Card>
-                        </DialogTrigger>
-                        <DialogContent className="max-w-4xl p-0 bg-background">
-                          <div className="relative">
-                            <img
-                              src={image.url}
-                              alt={image.caption}
-                              className="w-full h-auto"
-                            />
-                            <div className="p-4 bg-card">
-                              <p className="text-sm text-foreground">{image.caption}</p>
-                            </div>
-                          </div>
-                        </DialogContent>
-                      </Dialog>
-                    </CarouselItem>
-                  ))}
-                </CarouselContent>
-                <CarouselPrevious className="-left-4 md:-left-12" />
-                <CarouselNext className="-right-4 md:-right-12" />
-              </Carousel>
+              {/* Use CategoryCarousel which handles autoplay */}
+              <CategoryCarousel category={category} />
             </div>
           ))}
         </div>

@@ -31,7 +31,7 @@ const Donate = () => {
               </div>
               <div>
                 <p className="font-bold text-lg text-foreground">Registered NGO</p>
-                <p className="text-sm text-muted-foreground">Registration No. 31/2025</p>
+                <p className="text-sm text-muted-foreground">Registration No. 31/2025 — Registered on fourth february 2025</p>
               </div>
             </div>
             
@@ -74,10 +74,11 @@ const Donate = () => {
               </div>
               
               <div className="flex flex-col sm:flex-row gap-4">
+                {/* Hide the Donate Now button on small screens; keep Call to Donate as primary on mobile */}
                 <Button 
                   variant="donate" 
                   size="lg" 
-                  className="flex-1 group relative overflow-hidden"
+                  className="flex-1 group relative overflow-hidden hidden sm:flex"
                   onClick={() => window.location.href = 'mailto:kaaraikarangal@gmail.com?subject=Donation Inquiry'}
                 >
                   <span className="relative z-10">Donate Now</span>
@@ -85,7 +86,7 @@ const Donate = () => {
                 <Button 
                   variant="outline" 
                   size="lg" 
-                  className="flex-1 border-2 hover:border-primary hover:bg-primary/5"
+                  className="flex-1 border-2 hover:border-primary hover:bg-primary/5 w-full text-lg py-3 sm:py-0 sm:w-auto"
                   onClick={() => window.location.href = 'tel:+919750807463'}
                 >
                   Call to Donate

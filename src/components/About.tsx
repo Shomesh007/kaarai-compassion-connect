@@ -35,7 +35,7 @@ const About = () => {
               
               <div className="bg-gradient-to-r from-primary/5 to-accent/5 rounded-2xl p-6 border-l-4 border-primary">
                 <p className="text-base md:text-lg text-foreground/80 leading-relaxed">
-                  Registered NGO (Reg. No. 31/2025), Kaarai Karangal operates with complete transparency and accountability. Every contribution goes directly toward serving those in need, building a society where compassion is visible and tangible.
+                  Registered NGO (Reg. No. 31/2025 — Registered on fourth february 2025), Kaarai Karangal operates with complete transparency and accountability. Every contribution goes directly toward serving those in need, building a society where compassion is visible and tangible.
                 </p>
               </div>
               

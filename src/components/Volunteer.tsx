@@ -4,40 +4,26 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { useToast } from "@/hooks/use-toast";
-import { Mail, Phone } from "lucide-react";
+// import toast hook removed - using dialog confirmation instead of mailto/toast
+import { Mail, Phone, CheckCircle } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogClose } from "@/components/ui/dialog";
 
 const Volunteer = () => {
-  const { toast } = useToast();
+  // confirmation dialog will be shown on submit
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
     email: "",
     interest: "",
   });
+  const [successOpen, setSuccessOpen] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Create mailto link with form data
-    const subject = encodeURIComponent("Volunteer Application - Kaarai Karangal");
-    const body = encodeURIComponent(`
-Name: ${formData.name}
-Phone: ${formData.phone}
-Email: ${formData.email}
-Area of Interest: ${formData.interest}
-
-I would like to volunteer with Kaarai Karangal.
-    `);
-    
-    window.location.href = `mailto:kaaraikarangal@gmail.com?subject=${subject}&body=${body}`;
-    
-    toast({
-      title: "Thank you for your interest!",
-      description: "We'll be in touch with you soon.",
-    });
-    
-    setFormData({ name: "", phone: "", email: "", interest: "" });
+  // Open confirmation dialog and reset form
+  setSuccessOpen(true);
+  setFormData({ name: "", phone: "", email: "", interest: "" });
   };
 
   return (
@@ -179,6 +165,32 @@ I would like to volunteer with Kaarai Karangal.
               </div>
             </div>
           </Card>
+          
+          {/* Success dialog shown after signup */}
+          <Dialog open={successOpen} onOpenChange={setSuccessOpen}>
+            <DialogContent className="w-[92%] sm:w-auto sm:max-w-sm p-0 bg-transparent">
+              <div className="bg-card rounded-3xl shadow-xl overflow-hidden">
+                <div className="px-6 pt-6 pb-4 flex items-start gap-4 bg-gradient-to-r from-primary/10 to-accent/10">
+                  <div className="w-14 h-14 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-md flex-shrink-0">
+                    <CheckCircle className="w-8 h-8 text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <DialogTitle className="text-lg font-semibold text-foreground">Registration Successful</DialogTitle>
+                    <DialogDescription className="text-sm text-muted-foreground">Thank you for registering as a volunteer. We will contact you soon with next steps.</DialogDescription>
+                  </div>
+                </div>
+
+                <div className="px-6 pb-6 pt-3">
+                  <p className="text-sm text-muted-foreground">If you have any urgent queries, reach us at <a className="text-primary" href="tel:+919750807463">+91 97508 07463</a>.</p>
+                  <div className="mt-5 flex justify-end">
+                    <DialogClose asChild>
+                      <Button variant="donate" className="px-6">Close</Button>
+                    </DialogClose>
+                  </div>
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
         </div>
       </div>
     </section>

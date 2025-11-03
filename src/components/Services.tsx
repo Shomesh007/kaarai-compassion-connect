@@ -31,57 +31,39 @@ const services = [
 
 const Services = () => {
   return (
-    <section id="services" className="relative py-20 px-4 overflow-hidden">
-      {/* Decorative background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-secondary/20 via-background to-card/50" />
-      <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
-      <div className="absolute bottom-0 left-0 w-96 h-96 bg-accent/5 rounded-full blur-3xl" />
-      
-      <div className="relative max-w-6xl mx-auto z-10">
-        {/* Section header */}
-        <div className="text-center mb-16">
-          <div className="inline-block">
-            <h2 className="text-4xl md:text-5xl font-bold font-heading text-foreground mb-4 relative">
-              What We Do
-              <div className="absolute -bottom-2 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-accent to-transparent" />
-            </h2>
-          </div>
-          <p className="text-lg md:text-xl text-muted-foreground mt-6 max-w-2xl mx-auto">
-            Our comprehensive programs touch lives across communities, bringing hope and support to those who need it most
-          </p>
-        </div>
+    <section id="services" className="py-16 px-4 bg-secondary/30">
+      <div className="max-w-6xl mx-auto">
+        <h2 className="text-3xl md:text-4xl font-bold font-['Poppins'] text-center mb-4 text-foreground">
+          What We Do
+        </h2>
+        <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
+          Our comprehensive programs address the most pressing needs of marginalized communities
+        </p>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {services.map((service, index) => (
-            <Card
-              key={index}
-              className="group relative p-8 glass-effect hover:bg-card transition-all duration-500 border-2 border-transparent hover:border-primary/20 cursor-pointer overflow-hidden"
-              style={{
-                animationDelay: `${index * 100}ms`,
-              }}
-            >
-              {/* Hover gradient overlay */}
-              <div className="absolute inset-0 bg-[var(--gradient-warm)] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              
-              <div className="relative flex flex-col items-center text-center space-y-5 z-10">
-                {/* Icon with animated background */}
-                <div className="relative">
-                  <div className="absolute inset-0 bg-gradient-to-br from-primary to-accent rounded-3xl blur-xl opacity-20 group-hover:opacity-40 transition-opacity duration-500" />
-                  <div className="relative w-20 h-20 rounded-3xl bg-gradient-to-br from-primary/15 to-accent/15 flex items-center justify-center group-hover:scale-110 transition-transform duration-500 border-2 border-primary/20">
-                    <service.icon className="w-10 h-10 text-primary group-hover:text-accent transition-colors duration-500" />
+        <div className="overflow-x-auto pb-4 -mx-4 px-4">
+          <div className="flex gap-4 md:grid md:grid-cols-2 lg:grid-cols-3 min-w-min md:min-w-0">
+            {services.map((service, index) => {
+              const Icon = service.icon;
+              return (
+                <Card
+                  key={index}
+                  className="flex-shrink-0 w-72 md:w-auto p-6 bg-[var(--gradient-card)] shadow-[var(--shadow-soft)] hover:shadow-[var(--shadow-hover)] transition-all duration-300 hover:-translate-y-1 border-border"
+                >
+                  <div className="flex flex-col items-center text-center space-y-4">
+                    <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center">
+                      <Icon className="w-7 h-7 text-primary" />
+                    </div>
+                    <h3 className="text-lg font-semibold font-['Poppins'] text-foreground">
+                      {service.title}
+                    </h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      {service.description}
+                    </p>
                   </div>
-                </div>
-                
-                <h3 className="text-xl font-bold font-heading text-foreground group-hover:text-primary transition-colors duration-300">
-                  {service.title}
-                </h3>
-                
-                <p className="text-sm md:text-base text-muted-foreground leading-relaxed group-hover:text-foreground/80 transition-colors duration-300">
-                  {service.description}
-                </p>
-              </div>
-            </Card>
-          ))}
+                </Card>
+              );
+            })}
+          </div>
         </div>
       </div>
     </section>

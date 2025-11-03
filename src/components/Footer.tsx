@@ -11,7 +11,7 @@ const Footer = () => {
         <div className="text-center space-y-6">
           {/* Logo and name */}
           <div className="flex items-center justify-center gap-3">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center border-2 border-primary/30">
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center border-2 border-primary/30 mt-1">
               <Heart className="w-6 h-6 text-primary" fill="currentColor" />
             </div>
             <h3 className="text-3xl font-bold font-heading bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
@@ -62,15 +62,15 @@ const Footer = () => {
               Our Presence
             </h4>
             <div className="space-y-3 text-sm">
-              <p className="flex items-center gap-3 text-muted-foreground group">
+              <div className="flex items-center gap-3 text-muted-foreground group">
                 <div className="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center">
                   <MapPin className="w-4 h-4" />
                 </div>
                 Karaikal, Puducherry
-              </p>
+              </div>
               <div className="pl-11">
                 <p className="text-xs font-semibold text-primary">
-                  Registered NGO - Reg. No. 31/2025
+                  Registered NGO - Reg. No. 31/2025 — Registered on fourth february 2025
                 </p>
               </div>
             </div>
