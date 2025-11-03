@@ -8,36 +8,52 @@ const Hero = () => {
   };
 
   return (
-    <section className="min-h-screen flex flex-col items-center justify-center px-4 py-12 bg-[var(--gradient-hero)] text-center">
-      <div className="max-w-2xl mx-auto space-y-8 animate-in fade-in duration-1000">
-        <div className="inline-flex items-center justify-center w-20 h-20 mb-4 rounded-full bg-primary/10">
-          <Heart className="w-10 h-10 text-primary" fill="currentColor" />
+    <section className="relative min-h-screen flex flex-col items-center justify-center px-4 py-16 overflow-hidden">
+      {/* Background gradient */}
+      <div className="absolute inset-0 bg-[var(--gradient-hero)]" />
+      
+      {/* Decorative elements */}
+      <div className="absolute top-20 left-10 w-32 h-32 bg-primary/5 rounded-full blur-3xl animate-float" />
+      <div className="absolute bottom-20 right-10 w-40 h-40 bg-accent/5 rounded-full blur-3xl animate-float" style={{ animationDelay: '2s' }} />
+      
+      <div className="relative max-w-4xl mx-auto space-y-10 animate-in fade-in duration-1000 z-10">
+        {/* Logo with glow effect */}
+        <div className="inline-flex items-center justify-center w-24 h-24 mb-4 rounded-full bg-gradient-to-br from-primary/20 to-accent/20 backdrop-blur-sm border-2 border-primary/30 shadow-[var(--shadow-soft)] animate-glow">
+          <Heart className="w-12 h-12 text-primary drop-shadow-lg" fill="currentColor" />
         </div>
         
-        <h1 className="text-4xl md:text-5xl font-bold font-['Poppins'] text-foreground">
+        {/* Organization name with gradient */}
+        <h1 className="text-4xl md:text-6xl font-bold font-heading bg-gradient-to-r from-primary via-primary to-accent bg-clip-text text-transparent leading-tight">
           Kaarai Karangal
         </h1>
         
-        <blockquote className="text-2xl md:text-3xl font-['Poppins'] font-semibold text-primary italic border-l-4 border-primary pl-4 py-2">
-          "Yaadhum Ooree, Yaavarum Kelir"
-        </blockquote>
+        {/* Tamil quote - prominent and stylized */}
+        <div className="relative">
+          <div className="absolute inset-0 bg-[var(--gradient-warm)] blur-2xl opacity-30 rounded-3xl" />
+          <blockquote className="relative text-3xl md:text-5xl font-bold font-heading text-primary px-6 py-8 rounded-2xl border-2 border-primary/20 bg-card/50 backdrop-blur-sm shadow-[var(--shadow-soft)]">
+            "யாதும் ஊரே யாவரும் கேளிர்"
+          </blockquote>
+        </div>
         
-        <p className="text-lg md:text-xl text-muted-foreground">
+        {/* Translation */}
+        <p className="text-xl md:text-2xl text-muted-foreground font-medium italic">
           All towns are our home, all people our kin
         </p>
         
-        <p className="text-base md:text-lg text-foreground/80 max-w-xl mx-auto leading-relaxed">
+        {/* Description with better typography */}
+        <p className="text-base md:text-lg text-foreground/75 max-w-2xl mx-auto leading-relaxed px-4">
           Serving marginalized communities across Tamil Nadu and Puducherry through food, shelter, education, and blood donation drives.
         </p>
         
-        <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
+        {/* CTA buttons with enhanced styling */}
+        <div className="flex flex-col sm:flex-row gap-4 justify-center pt-6">
           <Button 
             variant="donate" 
             size="xl"
             onClick={() => scrollToSection('donate')}
-            className="w-full sm:w-auto"
+            className="w-full sm:w-auto group relative overflow-hidden"
           >
-            Donate Now
+            <span className="relative z-10">Donate Now</span>
           </Button>
           <Button 
             variant="cta" 

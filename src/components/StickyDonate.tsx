@@ -30,10 +30,10 @@ const StickyDonate = () => {
         variant="donate"
         size="lg"
         onClick={scrollToDonate}
-        className="shadow-lg hover:shadow-xl gap-2"
+        className="shadow-[var(--shadow-strong)] hover:shadow-[var(--shadow-hover)] gap-2 animate-glow rounded-full px-6"
       >
         <Heart className="w-5 h-5" fill="currentColor" />
-        Donate
+        <span className="font-bold">Donate</span>
       </Button>
     </div>
   );

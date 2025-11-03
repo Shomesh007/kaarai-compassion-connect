@@ -41,18 +41,30 @@ I would like to volunteer with Kaarai Karangal.
   };
 
   return (
-    <section id="volunteer" className="py-16 px-4 bg-secondary/30">
-      <div className="max-w-4xl mx-auto">
-        <h2 className="text-3xl md:text-4xl font-bold font-['Poppins'] text-center mb-4 text-foreground">
-          Join Our Mission
-        </h2>
-        <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
-          Become a volunteer and help us make compassion visible in our communities
-        </p>
+    <section id="volunteer" className="relative py-20 px-4 overflow-hidden">
+      {/* Background */}
+      <div className="absolute inset-0 bg-gradient-to-b from-secondary/30 via-background to-card" />
+      <div className="absolute top-20 right-10 w-80 h-80 bg-primary/5 rounded-full blur-3xl animate-float" />
+      
+      <div className="relative max-w-5xl mx-auto z-10">
+        {/* Section header */}
+        <div className="text-center mb-16">
+          <div className="inline-block">
+            <h2 className="text-4xl md:text-5xl font-bold font-heading text-foreground mb-4 relative">
+              Join Our Mission
+              <div className="absolute -bottom-2 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-primary to-transparent" />
+            </h2>
+          </div>
+          <p className="text-lg md:text-xl text-muted-foreground mt-6 max-w-2xl mx-auto">
+            Become a volunteer and help us make compassion visible in our communities
+          </p>
+        </div>
         
-        <div className="grid md:grid-cols-2 gap-6">
-          <Card className="p-6 bg-[var(--gradient-card)] shadow-[var(--shadow-soft)] border-border">
-            <h3 className="text-xl font-semibold font-['Poppins'] mb-4 text-foreground">
+        <div className="grid md:grid-cols-2 gap-8">
+          {/* Signup form */}
+          <Card className="p-8 glass-effect shadow-[var(--shadow-soft)] border-2 border-primary/10 rounded-3xl">
+            <h3 className="text-2xl font-bold font-heading mb-6 text-foreground flex items-center gap-2">
+              <span className="w-2 h-8 bg-gradient-to-b from-primary to-accent rounded-full" />
               Quick Signup
             </h3>
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -105,39 +117,45 @@ I would like to volunteer with Kaarai Karangal.
                 />
               </div>
               
-              <Button type="submit" variant="donate" size="lg" className="w-full">
-                Become a Volunteer
+              <Button type="submit" variant="donate" size="lg" className="w-full group relative overflow-hidden">
+                <span className="relative z-10">Become a Volunteer</span>
               </Button>
             </form>
           </Card>
           
-          <Card className="p-6 bg-[var(--gradient-card)] shadow-[var(--shadow-soft)] border-border">
-            <h3 className="text-xl font-semibold font-['Poppins'] mb-4 text-foreground">
+          {/* Contact info */}
+          <Card className="p-8 glass-effect shadow-[var(--shadow-soft)] border-2 border-accent/10 rounded-3xl">
+            <h3 className="text-2xl font-bold font-heading mb-6 text-foreground flex items-center gap-2">
+              <span className="w-2 h-8 bg-gradient-to-b from-accent to-primary rounded-full" />
               Get in Touch
             </h3>
             
             <div className="space-y-6">
               <div className="space-y-4">
-                <div className="flex items-start gap-3 p-4 rounded-lg bg-primary/5 border border-primary/20">
-                  <Mail className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+                <div className="flex items-start gap-4 p-5 rounded-2xl bg-gradient-to-r from-primary/10 to-primary/5 border-2 border-primary/20 hover:border-primary/40 transition-all duration-300 group cursor-pointer">
+                  <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
+                    <Mail className="w-5 h-5 text-primary" />
+                  </div>
                   <div>
-                    <p className="font-semibold text-sm text-foreground mb-1">Email</p>
+                    <p className="font-bold text-foreground mb-1">Email</p>
                     <a 
                       href="mailto:kaaraikarangal@gmail.com"
-                      className="text-sm text-primary hover:underline"
+                      className="text-sm text-primary hover:text-accent transition-colors"
                     >
                       kaaraikarangal@gmail.com
                     </a>
                   </div>
                 </div>
                 
-                <div className="flex items-start gap-3 p-4 rounded-lg bg-primary/5 border border-primary/20">
-                  <Phone className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+                <div className="flex items-start gap-4 p-5 rounded-2xl bg-gradient-to-r from-accent/10 to-accent/5 border-2 border-accent/20 hover:border-accent/40 transition-all duration-300 group cursor-pointer">
+                  <div className="w-10 h-10 rounded-xl bg-accent/20 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
+                    <Phone className="w-5 h-5 text-accent" />
+                  </div>
                   <div>
-                    <p className="font-semibold text-sm text-foreground mb-1">Phone</p>
+                    <p className="font-bold text-foreground mb-1">Phone</p>
                     <a 
                       href="tel:+919750807463"
-                      className="text-sm text-primary hover:underline"
+                      className="text-sm text-accent hover:text-primary transition-colors"
                     >
                       +91 97508 07463
                     </a>
@@ -145,15 +163,15 @@ I would like to volunteer with Kaarai Karangal.
                 </div>
               </div>
               
-              <div className="pt-4 border-t border-border">
-                <h4 className="font-semibold text-sm text-foreground mb-2">Partner With Us</h4>
-                <p className="text-sm text-muted-foreground mb-4">
+              <div className="pt-6 border-t-2 border-border/50">
+                <h4 className="font-bold text-lg text-foreground mb-2">Partner With Us</h4>
+                <p className="text-sm text-muted-foreground mb-5">
                   Organizations interested in collaboration can reach out to us directly.
                 </p>
                 <Button 
                   variant="outline" 
                   size="lg" 
-                  className="w-full"
+                  className="w-full border-2 hover:border-accent hover:bg-accent/5 transition-all duration-300"
                   onClick={() => window.location.href = 'mailto:kaaraikarangal@gmail.com?subject=Partnership Inquiry'}
                 >
                   Partner Inquiry
