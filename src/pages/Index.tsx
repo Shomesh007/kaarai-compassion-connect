@@ -2,7 +2,6 @@ import Hero from "@/components/Hero";
 import About from "@/components/About";
 import Services from "@/components/Services";
 import Donate from "@/components/Donate";
-import Fundraising from "@/components/Fundraising";
 import Gallery from "@/components/Gallery";
 import Volunteer from "@/components/Volunteer";
 import Footer from "@/components/Footer";
@@ -15,7 +14,6 @@ const Index = () => {
       <About />
       <Services />
       <Donate />
-      <Fundraising />
       <Gallery />
       <Volunteer />
       <Footer />
