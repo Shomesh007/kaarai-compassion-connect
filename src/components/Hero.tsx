@@ -1,4 +1,6 @@
 import { Button } from "@/components/ui/button";
+import { useEffect, useRef } from "react";
+import { allImpactImageUrls } from "@/lib/impactData";
 
 const Hero = () => {
   const scrollToSection = (id: string) => {
@@ -6,8 +8,43 @@ const Hero = () => {
     element?.scrollIntoView({ behavior: "smooth" });
   };
 
+  // Preload impact/gallery images once when Hero becomes visible for the first time.
+  const heroRef = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    const el = heroRef.current || document.querySelector('section[role="hero"]') || document.querySelector('section');
+    if (!el || typeof IntersectionObserver === 'undefined') return;
+
+    let triggered = false;
+    const obs = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!triggered && entry.isIntersecting) {
+            triggered = true;
+            // Preload each image
+            try {
+              allImpactImageUrls.forEach((url) => {
+                const img = new Image();
+                img.src = url;
+                // optional: decode to ensure browser starts loading
+                if (img.decode) img.decode().catch(() => {});
+              });
+            } catch (e) {
+              // ignore preload errors
+            }
+            obs.disconnect();
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center px-4 pt-28 pb-16 overflow-hidden">
+  <section ref={heroRef} role="hero" className="relative min-h-screen flex flex-col items-center justify-center px-4 pt-28 pb-16 overflow-hidden">
       {/* Background gradient */}
       <div className="absolute inset-0 bg-[var(--gradient-hero)]" />
       
