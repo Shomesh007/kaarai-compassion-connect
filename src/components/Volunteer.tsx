@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 // import toast hook removed - using dialog confirmation instead of mailto/toast
 import { Mail, Phone, CheckCircle } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogClose } from "@/components/ui/dialog";
+import { contact } from "../lib/impactData";
 
 const Volunteer = () => {
   // confirmation dialog will be shown on submit
@@ -139,11 +140,11 @@ const Volunteer = () => {
                   </div>
                   <div>
                     <p className="font-bold text-foreground mb-1">Phone</p>
-                    <a 
-                      href="tel:+919750807463"
+                    <a
+                      href={`tel:${contact.tel}`}
                       className="text-sm text-accent hover:text-primary transition-colors"
                     >
-                      +91 97508 07463
+                      {contact.display}
                     </a>
                   </div>
                 </div>
@@ -181,7 +182,7 @@ const Volunteer = () => {
                 </div>
 
                 <div className="px-6 pb-6 pt-3">
-                  <p className="text-sm text-muted-foreground">If you have any urgent queries, reach us at <a className="text-primary" href="tel:+919750807463">+91 97508 07463</a>.</p>
+                  <p className="text-sm text-muted-foreground">If you have any urgent queries, reach us at <a className="text-primary" href={`tel:${contact.tel}`}>{contact.display}</a>.</p>
                   <div className="mt-5 flex justify-end">
                     <DialogClose asChild>
                       <Button variant="donate" className="px-6">Close</Button>

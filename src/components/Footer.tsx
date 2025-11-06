@@ -1,4 +1,5 @@
 import { Heart, Mail, Phone, MapPin } from "lucide-react";
+import { contact, socialLinks } from "../lib/impactData";
 
 const Footer = () => {
   return (
@@ -44,15 +45,34 @@ const Footer = () => {
                 </div>
                 kaaraikarangal@gmail.com
               </a>
-              <a 
-                href="tel:+919750807463"
+              <a
+                href={`tel:${contact.tel}`}
                 className="flex items-center gap-3 text-muted-foreground hover:text-primary transition-colors group"
               >
                 <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
                   <Phone className="w-4 h-4" />
                 </div>
-                +91 97508 07463
+                {contact.display}
               </a>
+
+              <div className="flex flex-col gap-2 pt-2">
+                <a
+                  href={socialLinks.instagram}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                >
+                  Instagram: @kaarai_karangal
+                </a>
+                <a
+                  href={socialLinks.facebook}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                >
+                  Facebook
+                </a>
+              </div>
             </div>
           </div>
           

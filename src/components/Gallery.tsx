@@ -19,6 +19,46 @@ const Gallery = () => {
   // dialog content uses local Dialog per item; we no longer track selectedImage here
   const visibleCategories = isExpanded ? impactCategories : impactCategories.slice(0, 2);
 
+  // Small inner component for dialog content so it can use hooks per image instance.
+  const ImagePreview = ({ image }: { image: { url: string; caption: string } }) => {
+    const [loaded, setLoaded] = useState(false);
+
+    return (
+      <DialogContent className="max-w-lg p-0 bg-background">
+        <DialogHeader>
+          <DialogTitle>{image.caption}</DialogTitle>
+          <DialogDescription>Image preview — click close or outside to dismiss.</DialogDescription>
+        </DialogHeader>
+        <div className="relative bg-black/5 flex items-center justify-center min-h-[40vh]">
+          <img
+            src={image.url}
+            alt={image.caption}
+            className={`w-full h-auto max-h-[80vh] object-contain transition-opacity duration-300 ${loaded ? 'opacity-100' : 'opacity-0'}`}
+            loading="eager"
+            fetchPriority="high"
+            decoding="async"
+            onLoad={() => setLoaded(true)}
+            onError={(e) => {
+              const t = e.currentTarget as HTMLImageElement;
+              t.src = '/img/placeholder.png';
+              setLoaded(true);
+            }}
+          />
+
+          {!loaded && (
+            <div className="absolute">
+              <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+            </div>
+          )}
+
+        </div>
+        <div className="p-4 bg-card">
+          <p className="text-sm text-foreground">{image.caption}</p>
+        </div>
+      </DialogContent>
+    );
+  };
+
   // Inner component to handle per-category carousel autoplay every 3 seconds.
   const CategoryCarousel = ({ category }: { category: (typeof impactCategories)[0] }) => {
     const [api, setApi] = useState<CarouselApi | null>(null);
@@ -93,29 +133,7 @@ const Gallery = () => {
                     </div>
                   </Card>
                 </DialogTrigger>
-                <DialogContent className="max-w-lg p-0 bg-background">
-                  <DialogHeader>
-                    <DialogTitle>{image.caption}</DialogTitle>
-                    <DialogDescription>Image preview — click close or outside to dismiss.</DialogDescription>
-                  </DialogHeader>
-                  <div className="relative">
-                    <img
-                      src={image.url}
-                      alt={image.caption}
-                      className="w-full h-auto max-h-[80vh] object-contain"
-                      loading="eager"
-                      fetchPriority="high"
-                      // keep small onError safeguard so the dialog doesn't show blank white
-                      onError={(e) => {
-                        const t = e.currentTarget as HTMLImageElement;
-                        t.src = '/img/placeholder.png';
-                      }}
-                    />
-                    <div className="p-4 bg-card">
-                      <p className="text-sm text-foreground">{image.caption}</p>
-                    </div>
-                  </div>
-                </DialogContent>
+                <ImagePreview image={image} />
               </Dialog>
             </CarouselItem>
           ))}

@@ -21,14 +21,22 @@ const Hero = () => {
         entries.forEach((entry) => {
           if (!triggered && entry.isIntersecting) {
             triggered = true;
-            // Preload each image
+            // Preload each image and attempt to decode so the browser caches and decodes it before dialog opens.
             try {
-              allImpactImageUrls.forEach((url) => {
-                const img = new Image();
-                img.src = url;
-                // optional: decode to ensure browser starts loading
-                if (img.decode) img.decode().catch(() => {});
-              });
+              (async () => {
+                await Promise.allSettled(
+                  allImpactImageUrls.map((url) => {
+                    try {
+                      const img = new Image();
+                      img.src = url;
+                      // return decode promise if available so we wait for the image to be decoded
+                      return img.decode ? img.decode().catch(() => {}) : Promise.resolve();
+                    } catch (e) {
+                      return Promise.resolve();
+                    }
+                  }),
+                );
+              })();
             } catch (e) {
               // ignore preload errors
             }

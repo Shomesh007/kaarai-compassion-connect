@@ -1,6 +1,7 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ShieldCheck, PieChart } from "lucide-react";
+import { contact } from "../lib/impactData";
 
 const Donate = () => {
   return (
@@ -83,11 +84,11 @@ const Donate = () => {
                 >
                   <span className="relative z-10">Donate Now</span>
                 </Button>
-                <Button 
-                  variant="outline" 
-                  size="lg" 
+                <Button
+                  variant="outline"
+                  size="lg"
                   className="flex-1 border-2 hover:border-primary hover:bg-primary/5 w-full text-lg py-3 sm:py-0 sm:w-auto"
-                  onClick={() => window.location.href = 'tel:+919750807463'}
+                  onClick={() => window.location.href = `tel:${contact.tel}`}
                 >
                   Call to Donate
                 </Button>

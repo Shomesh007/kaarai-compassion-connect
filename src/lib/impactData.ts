@@ -37,3 +37,25 @@ export const impactCategories = [
 
 // utility to flatten all image urls
 export const allImpactImageUrls = impactCategories.flatMap((c) => c.images.map((i) => i.url));
+
+// Contact, social links and donors (added from provided messages)
+export const contact = {
+  // display string shown in UI
+  display: "+91 82205 73306",
+  // tel string used in tel: links
+  tel: "+918220573306",
+};
+
+export const socialLinks = {
+  instagram: "https://www.instagram.com/kaarai_karangal?igsh=YzY1OWkxdG5wemg1",
+  facebook: "https://www.facebook.com/share/17KJ5ARhmN/",
+};
+
+// Owner info: this number and pages belong to the NGO owner/organization
+export const owner = {
+  name: "Kaarai Karangal",
+  ownerName: "Vishnu Varathan",
+  contact: contact,
+  social: socialLinks,
+  note: "Owner contact and social pages for the NGO",
+};
