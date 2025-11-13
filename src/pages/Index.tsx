@@ -4,6 +4,7 @@ import Services from "@/components/Services";
 import Donate from "@/components/Donate";
 import Gallery from "@/components/Gallery";
 import Volunteer from "@/components/Volunteer";
+import DonateBloodSection from "@/components/DonateBloodSection";
 import SponsorsSection from "@/components/SponsorsSection";
 import Footer from "@/components/Footer";
 import StickyDonate from "@/components/StickyDonate";
@@ -14,6 +15,7 @@ const Index = () => {
       <Hero />
       <About />
       <Services />
+      <DonateBloodSection />
       <Donate />
       <Gallery />
       <Volunteer />

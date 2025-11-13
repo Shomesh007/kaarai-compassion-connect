@@ -17,7 +17,7 @@ export default function SponsorsSection() {
             <div className="absolute -bottom-2 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-primary to-transparent" />
           </h2>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-2 gap-6 justify-center mx-auto ml-24">
+        <div className="grid grid-cols-2 gap-6 justify-center mx-auto md:grid-cols-2 md:ml-24">
           {sponsors.map((sponsor, idx) => (
             <div
               key={idx}

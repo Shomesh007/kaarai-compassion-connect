@@ -105,6 +105,9 @@ const Footer = () => {
           <p className="text-sm text-muted-foreground">
             © {new Date().getFullYear()} Kaarai Karangal. All rights reserved.
           </p>
+          <p className="text-xs text-muted-foreground">
+            Developed by Guru, SnapLearnKkl
+          </p>
         </div>
       </div>
     </footer>

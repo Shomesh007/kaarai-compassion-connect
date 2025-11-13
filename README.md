@@ -63,3 +63,16 @@ Build and deploy normally using your hosting platform. Run `npm run build` then 
 ## Custom domains
 
 Yes — you can connect a custom domain through your hosting provider or platform. Refer to your host's documentation for exact steps.
+
+## Credits
+
+Developed by Your Name (your.email@example.com), 2025
+Project executed by SnapLearnKkl
+
+---
+
+## Developer Attribution (for maintainers)
+
+- Author: Your Name (your.email@example.com)
+- Company: SnapLearnKkl
+- Attribution added to README, footer, and recommended for package.json and main source files.
