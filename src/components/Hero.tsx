@@ -61,14 +61,14 @@ const Hero = () => {
       <div className="absolute bottom-20 right-10 w-40 h-40 bg-accent/5 rounded-full blur-3xl animate-float" style={{ animationDelay: '2s' }} />
 
       {/* Top-centered logo (fixed within the hero area) */}
-      <div className="absolute top-12 left-1/2 transform -translate-x-1/2 z-20">
+      <div className="absolute left-1/2 transform -translate-x-1/2 z-20 top-16 md:top-8">
         <img src="/img/logo.jpg" alt="Kaarai Karangal logo" className="w-40 h-40 object-contain" />
       </div>
 
       <div className="relative max-w-4xl mx-auto space-y-10 animate-in fade-in duration-1000 z-10 text-center">
         
         {/* Organization name with gradient */}
-        <h1 className="text-4xl md:text-6xl font-bold font-heading bg-gradient-to-r from-primary via-primary to-accent bg-clip-text text-transparent leading-tight">
+        <h1 className="text-4xl md:text-6xl font-bold font-heading bg-gradient-to-r from-primary via-primary to-accent bg-clip-text text-transparent leading-tight mt-8 md:mt-16">
           Kaarai Karangal
         </h1>
         
@@ -92,16 +92,16 @@ const Hero = () => {
         
         {/* CTA buttons with enhanced styling */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center pt-6">
-          <Button 
-            variant="donate" 
+          <Button
+            variant="donate"
             size="xl"
             onClick={() => scrollToSection('donate')}
             className="w-full sm:w-auto group relative overflow-hidden"
           >
             <span className="relative z-10">Donate Now</span>
           </Button>
-          <Button 
-            variant="cta" 
+          <Button
+            variant="cta"
             size="xl"
             onClick={() => scrollToSection('volunteer')}
             className="w-full sm:w-auto"

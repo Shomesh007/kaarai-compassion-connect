@@ -81,21 +81,14 @@ const Fundraising = () => {
                     </p>
                   </div>
                   
-                  <div className="flex gap-2 pt-2">
-                    <Button 
-                      variant="donate" 
-                      size="sm" 
-                      className="flex-1"
-                      onClick={() => window.location.href = 'mailto:kaaraikarangal@gmail.com?subject=Campaign Support: ' + campaign.title}
-                    >
-                      Contribute
-                    </Button>
+                  <div className="flex pt-2">
                     <Button
-                      variant="ghost"
+                      variant="donate"
                       size="sm"
-                      onClick={() => handleShare(campaign.title)}
+                      className="w-full"
+                      onClick={() => window.open('tel:+919123456789')}
                     >
-                      <Share2 className="w-4 h-4" />
+                      Call to Donate
                     </Button>
                   </div>
                 </div>
