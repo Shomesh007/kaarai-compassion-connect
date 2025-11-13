@@ -1,12 +1,10 @@
 import React from "react";
 
 const sponsors = [
-  { name: "Sekar textiles", logo: "" },
-  { name: "Fittness zone unisex gym", logo: "" },
-  { name: "Zen health care clinic", logo: "" },
-  { name: "Kaarai raman creations", logo: "" },
-  { name: "NGV fabrication", logo: "" },
-  { name: "Thaai decors", logo: "" },
+  { name: "Sekar textiles", logo: "/img/sekars_logo.png" },
+  { name: "Thaai Interiors", logo: "/img/Thaai_Interiors_Logo.jpg" },
+  { name: "GL Hospital", logo: "/img/gl_hospital_logo.jpg" },
+  { name: "Fitness Zone Unisex Gym", logo: "/img/fitness_zone_logo.jpg" },
 ];
 
 export default function SponsorsSection() {
@@ -19,7 +17,7 @@ export default function SponsorsSection() {
             <div className="absolute -bottom-2 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-primary to-transparent" />
           </h2>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-6 justify-center">
+        <div className="grid grid-cols-2 md:grid-cols-2 gap-6 justify-center mx-auto ml-24">
           {sponsors.map((sponsor, idx) => (
             <div
               key={idx}

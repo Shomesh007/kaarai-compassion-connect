@@ -169,23 +169,33 @@ const Volunteer = () => {
           
           {/* Success dialog shown after signup */}
           <Dialog open={successOpen} onOpenChange={setSuccessOpen}>
-            <DialogContent className="w-[92%] sm:w-auto sm:max-w-sm p-0 bg-transparent">
-              <div className="bg-card rounded-3xl shadow-xl overflow-hidden">
-                <div className="px-6 pt-6 pb-4 flex items-start gap-4 bg-gradient-to-r from-primary/10 to-accent/10">
-                  <div className="w-14 h-14 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-md flex-shrink-0">
-                    <CheckCircle className="w-8 h-8 text-white" />
+            <DialogContent className="w-full max-w-xs sm:max-w-md mx-auto p-0 bg-transparent border-none shadow-none">
+              <div className="relative rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl border-2 border-primary/30 animate-in fade-in duration-500"
+                style={{
+                  background: "rgba(255,255,255,0.95)",
+                  backdropFilter: "blur(8px)",
+                  boxShadow: "0 8px 32px rgba(0,0,0,0.18)"
+                }}>
+                {/* Decorative floating accent */}
+                <div className="absolute -top-10 -right-10 w-32 h-32 bg-gradient-to-br from-primary/30 via-accent/30 to-secondary/30 rounded-full blur-2xl opacity-60 pointer-events-none" />
+                <div className="px-6 pt-8 pb-4 flex flex-col items-center gap-4">
+                  <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg mb-2 animate-bounce-slow">
+                    <CheckCircle className="w-10 h-10 text-white drop-shadow-lg" />
                   </div>
-                  <div className="flex-1">
-                    <DialogTitle className="text-lg font-semibold text-foreground">Registration Successful</DialogTitle>
-                    <DialogDescription className="text-sm text-muted-foreground">Thank you for registering as a volunteer. We will contact you soon with next steps.</DialogDescription>
-                  </div>
+                  <DialogTitle className="text-2xl font-bold text-primary mb-2 text-center drop-shadow-sm">Thank You for Joining!</DialogTitle>
+                  <DialogDescription className="text-base text-foreground/90 text-center mb-2">
+                    Your registration as a volunteer is successful.<br />
+                    We’ll reach out soon with next steps.<br />
+                    <span className="block text-accent mt-2 font-semibold">Together, we make compassion visible.</span>
+                  </DialogDescription>
                 </div>
-
-                <div className="px-6 pb-6 pt-3">
-                  <p className="text-sm text-muted-foreground">If you have any urgent queries, reach us at <a className="text-primary" href={`tel:${contact.tel}`}>{contact.display}</a>.</p>
-                  <div className="mt-5 flex justify-end">
+                <div className="px-6 pb-8 pt-3">
+                  <p className="text-sm text-muted-foreground text-center">
+                    For urgent queries, call us at <a className="text-primary font-semibold" href={`tel:${contact.tel}`}>{contact.display}</a>.
+                  </p>
+                  <div className="mt-6 flex justify-center">
                     <DialogClose asChild>
-                      <Button variant="donate" className="px-6">Close</Button>
+                      <Button variant="donate" className="px-8 rounded-full shadow-lg">Close</Button>
                     </DialogClose>
                   </div>
                 </div>
