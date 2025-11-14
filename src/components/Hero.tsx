@@ -61,8 +61,8 @@ const Hero = () => {
       <div className="absolute bottom-20 right-10 w-40 h-40 bg-accent/5 rounded-full blur-3xl animate-float" style={{ animationDelay: '2s' }} />
 
       {/* Top-centered logo (fixed within the hero area) */}
-      <div className="absolute left-1/2 transform -translate-x-1/2 z-20 top-16 md:top-8">
-        <img src="/img/logo.jpg" alt="Kaarai Karangal logo" className="w-40 h-40 object-contain" />
+      <div className="absolute left-1/2 transform -translate-x-1/2 z-20 top-8 sm:top-6 md:top-4">
+        <img src="/img/logo.jpg" alt="Kaarai Karangal logo" className="w-28 h-28 sm:w-32 sm:h-32 md:w-40 md:h-40 object-contain mb-6" />
       </div>
 
       <div className="relative max-w-4xl mx-auto space-y-10 animate-in fade-in duration-1000 z-10 text-center">
