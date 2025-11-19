@@ -5,6 +5,9 @@ const sponsors = [
   { name: "Thaai Interiors", logo: "/img/Thaai_Interiors_Logo.jpg" },
   { name: "GL Hospital", logo: "/img/gl_hospital_logo.jpg" },
   { name: "Fitness Zone Unisex Gym", logo: "/img/fitness_zone_logo.jpg" },
+  { name: "Zen Healthcare", logo: "/img/zen.png" },
+  { name: "Royal Cards", logo: "/img/royal_cards.jpg" },
+  { name: "Studie 'O 7", logo: "/img/studio7.jpg" },
 ];
 
 export default function SponsorsSection() {

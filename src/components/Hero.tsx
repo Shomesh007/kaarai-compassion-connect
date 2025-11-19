@@ -87,7 +87,7 @@ const Hero = () => {
         
         {/* Description with better typography */}
         <p className="text-base md:text-lg text-foreground/75 max-w-2xl mx-auto leading-relaxed px-4">
-          Serving marginalized communities across Tamil Nadu and Puducherry through food, shelter, education, and blood donation drives.
+          Serving marginalized communities across Tamil Nadu and Puducherry through food, shelter, education, and blood donation drives. All towns are our home, all people our kin.
         </p>
         
         {/* CTA buttons with enhanced styling */}
