@@ -21,7 +21,7 @@ const About = () => {
         
         <div className="glass-effect rounded-3xl p-8 md:p-10 shadow-[var(--shadow-soft)] space-y-6">
           <p className="text-lg md:text-xl text-foreground/85 leading-relaxed first-letter:text-5xl first-letter:font-bold first-letter:text-primary first-letter:mr-2 first-letter:float-left">
-            Kaarai Karangal is a social service organization based in Karaikal, Puducherry, dedicated to serving marginalized communities across Tamil Nadu and Puducherry. Founded on the timeless Tamil principle of "யாதும் ஊரே யாவரும் கேளிர்" — meaning all towns are our home and all people our kin — we believe in the power of compassion to transform lives.
+            Kaarai Karangal is a social service organization based at K7 Hall, No.36/6 Kennadiyar street, Karaikal 609 602, dedicated to serving marginalized communities across Tamil Nadu and Puducherry. Founded on the timeless Tamil principle of "யாதும் ஊரே யாவரும் கேளிர்" — meaning all towns are our home and all people our kin — we believe in the power of compassion to transform lives.
           </p>
           
           {isExpanded && (

@@ -86,7 +86,7 @@ const Footer = () => {
                 <div className="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center">
                   <MapPin className="w-4 h-4" />
                 </div>
-                Karaikal, Puducherry
+                K7 Hall, No.36/6 Kennadiyar street, Karaikal 609 602.
               </div>
               <div className="pl-11">
                 <p className="text-xs font-semibold text-primary">
