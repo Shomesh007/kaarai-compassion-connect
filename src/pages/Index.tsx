@@ -14,10 +14,13 @@ const Index = () => {
     <div className="min-h-screen">
       <Hero />
       <About />
+      <UpcomingEvents />
       <Services />
       <DonateBloodSection />
       <Donate />
       <Gallery />
+      {/* --- Upcoming Events Section --- */}
+      <UpcomingEvents />
       <Volunteer />
       {/* Sponsors section inserted below Join Our Mission */}
       {/*
@@ -31,4 +34,5 @@ const Index = () => {
   );
 };
 
+import UpcomingEvents from "@/components/UpcomingEvents";
 export default Index;
