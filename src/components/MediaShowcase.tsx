@@ -65,13 +65,16 @@ const MediaShowcase = () => {
     };
   }, [sectionVisible, lightboxOpen, goNext]);
 
-  // Scroll filmstrip to keep active thumb visible
+  // Scroll filmstrip to keep active thumb visible (horizontal only — never scrolls the page)
   useEffect(() => {
     const strip = stripRef.current;
     if (!strip) return;
     const thumb = strip.children[activeIndex] as HTMLElement | undefined;
     if (thumb) {
-      thumb.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+      const stripLeft = strip.getBoundingClientRect().left;
+      const thumbLeft = thumb.getBoundingClientRect().left;
+      const scrollOffset = thumbLeft - stripLeft - (strip.clientWidth - thumb.clientWidth) / 2;
+      strip.scrollBy({ left: scrollOffset, behavior: "smooth" });
     }
   }, [activeIndex]);
 
