@@ -1,42 +1,11 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { Share2 } from "lucide-react";
-
-const campaigns = [
-  {
-    title: "Emergency Food Relief",
-    description: "Providing meals to 500 families affected by recent floods",
-    raised: 125000,
-    goal: 200000,
-    supporters: 89,
-  },
-  {
-    title: "Education Scholarships 2025",
-    description: "Supporting 50 underprivileged students with books and fees",
-    raised: 75000,
-    goal: 150000,
-    supporters: 45,
-  },
-  {
-    title: "Community Health Camp",
-    description: "Free medical check-ups and medicines for rural areas",
-    raised: 40000,
-    goal: 80000,
-    supporters: 32,
-  },
-];
+import { useCampaigns, useSiteSettings } from "@/hooks/use-cms";
 
 const Fundraising = () => {
-  const handleShare = (title: string) => {
-    if (navigator.share) {
-      navigator.share({
-        title: `Support: ${title}`,
-        text: `Help us make a difference! Support our campaign: ${title}`,
-        url: window.location.href,
-      });
-    }
-  };
+  const { data: campaigns } = useCampaigns();
+  const { data: settings } = useSiteSettings();
 
   return (
     <section id="fundraising" className="py-16 px-4 bg-secondary/30">
@@ -49,12 +18,12 @@ const Fundraising = () => {
         </p>
         
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {campaigns.map((campaign, index) => {
-            const progress = (campaign.raised / campaign.goal) * 100;
+          {(campaigns ?? []).map((campaign) => {
+            const progress = campaign.goal > 0 ? (campaign.raised / campaign.goal) * 100 : 0;
             
             return (
               <Card
-                key={index}
+                key={campaign.id}
                 className="p-6 bg-[var(--gradient-card)] shadow-[var(--shadow-soft)] hover:shadow-[var(--shadow-hover)] transition-all duration-300 border-border"
               >
                 <div className="space-y-4">
@@ -70,10 +39,10 @@ const Fundraising = () => {
                     <Progress value={progress} className="h-2" />
                     <div className="flex justify-between text-sm">
                       <span className="text-foreground font-semibold">
-                        ₹{campaign.raised.toLocaleString('en-IN')}
+                        ₹{Number(campaign.raised).toLocaleString('en-IN')}
                       </span>
                       <span className="text-muted-foreground">
-                        of ₹{campaign.goal.toLocaleString('en-IN')}
+                        of ₹{Number(campaign.goal).toLocaleString('en-IN')}
                       </span>
                     </div>
                     <p className="text-xs text-muted-foreground">
@@ -86,7 +55,7 @@ const Fundraising = () => {
                       variant="donate"
                       size="sm"
                       className="w-full"
-                      onClick={() => window.open('tel:+919123456789')}
+                      onClick={() => window.open(`tel:${settings?.phone_tel ?? '+918220573306'}`)}
                     >
                       Call to Donate
                     </Button>

@@ -11,13 +11,14 @@ import {
   type CarouselApi,
 } from "@/components/ui/carousel";
 import { ChevronDown, ChevronUp } from "lucide-react";
-
-import { impactCategories } from "@/lib/impactData";
+import { useImpactCategories } from "@/hooks/use-cms";
+import type { ImpactCategory } from "@/lib/cms-types";
 
 const Gallery = () => {
   const [isExpanded, setIsExpanded] = useState(false);
-  // dialog content uses local Dialog per item; we no longer track selectedImage here
-  const visibleCategories = isExpanded ? impactCategories : impactCategories.slice(0, 2);
+  const { data: impactCategories } = useImpactCategories();
+  const categories = impactCategories ?? [];
+  const visibleCategories = isExpanded ? categories : categories.slice(0, 2);
 
   // Small inner component for dialog content so it can use hooks per image instance.
   const ImagePreview = ({ image }: { image: { url: string; caption: string } }) => {
@@ -60,7 +61,7 @@ const Gallery = () => {
   };
 
   // Inner component to handle per-category carousel autoplay every 3 seconds.
-  const CategoryCarousel = ({ category }: { category: (typeof impactCategories)[0] }) => {
+  const CategoryCarousel = ({ category }: { category: ImpactCategory }) => {
     const [api, setApi] = useState<CarouselApi | null>(null);
     const containerRef = useRef<HTMLDivElement | null>(null);
     const [isVisible, setIsVisible] = useState(false);
@@ -110,36 +111,35 @@ const Gallery = () => {
           className="w-full px-4 md:px-0"
           setApi={(a: CarouselApi) => setApi(a)}
         >
-        <CarouselContent className="-ml-2 md:-ml-4">
-              {category.images.map((image, index) => (
-            <CarouselItem key={index} className="pl-2 md:pl-4 basis-[85%] sm:basis-1/2 lg:basis-1/3">
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Card
-                    className="overflow-hidden cursor-pointer group border-border hover:shadow-[var(--shadow-hover)] transition-all duration-300"
-                        // DialogTrigger handles opening; no extra state required
-                  >
-                    <div className="relative aspect-square">
-                      <img
-                        src={image.url}
-                        alt={image.caption}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
-                        <p className="text-white text-sm font-medium">
-                          {image.caption}
-                        </p>
+          <CarouselContent className="-ml-2 md:-ml-4">
+            {category.images.map((image, index) => (
+              <CarouselItem key={image.id ?? index} className="pl-2 md:pl-4 basis-[85%] sm:basis-1/2 lg:basis-1/3">
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Card
+                      className="overflow-hidden cursor-pointer group border-border hover:shadow-[var(--shadow-hover)] transition-all duration-300"
+                    >
+                      <div className="relative aspect-square">
+                        <img
+                          src={image.url}
+                          alt={image.caption}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                          <p className="text-white text-sm font-medium">
+                            {image.caption}
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                  </Card>
-                </DialogTrigger>
-                <ImagePreview image={image} />
-              </Dialog>
-            </CarouselItem>
-          ))}
-        </CarouselContent>
-        <CarouselPrevious className="-left-4 md:-left-12" />
-        <CarouselNext className="-right-4 md:-right-12" />
+                    </Card>
+                  </DialogTrigger>
+                  <ImagePreview image={image} />
+                </Dialog>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <CarouselPrevious className="-left-4 md:-left-12" />
+          <CarouselNext className="-right-4 md:-right-12" />
         </Carousel>
       </div>
     );
@@ -148,12 +148,14 @@ const Gallery = () => {
   return (
     <section id="gallery" className="py-16 px-4 bg-card">
       <div className="max-w-6xl mx-auto">
-        <h2 className="text-3xl md:text-4xl font-bold font-['Poppins'] text-center mb-4 text-foreground">
-          Our Impact
-        </h2>
-        <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
-          Moments of compassion in action across our communities
-        </p>
+        <div className="md:hidden">
+          <h2 className="text-3xl font-bold font-['Poppins'] text-center mb-4 text-foreground">
+            Our Impact
+          </h2>
+          <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
+            Moments of compassion in action across our communities
+          </p>
+        </div>
 
         <div className="space-y-12">
           {visibleCategories.map((category) => (
@@ -167,29 +169,30 @@ const Gallery = () => {
                 </p>
               </div>
 
-              {/* Use CategoryCarousel which handles autoplay */}
               <CategoryCarousel category={category} />
             </div>
           ))}
         </div>
 
-        <div className="flex justify-center pt-8">
-          <Button
-            variant="ghost"
-            onClick={() => setIsExpanded(!isExpanded)}
-            className="gap-2"
-          >
-            {isExpanded ? (
-              <>
-                Show Less <ChevronUp className="w-4 h-4" />
-              </>
-            ) : (
-              <>
-                View More Impact Stories <ChevronDown className="w-4 h-4" />
-              </>
-            )}
-          </Button>
-        </div>
+        {categories.length > 2 && (
+          <div className="flex justify-center pt-8">
+            <Button
+              variant="ghost"
+              onClick={() => setIsExpanded(!isExpanded)}
+              className="gap-2"
+            >
+              {isExpanded ? (
+                <>
+                  Show Less <ChevronUp className="w-4 h-4" />
+                </>
+              ) : (
+                <>
+                  View More Impact Stories <ChevronDown className="w-4 h-4" />
+                </>
+              )}
+            </Button>
+          </div>
+        )}
       </div>
     </section>
   );

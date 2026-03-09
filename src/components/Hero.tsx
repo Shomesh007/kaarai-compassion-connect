@@ -1,8 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { useEffect, useRef } from "react";
 import { allImpactImageUrls } from "@/lib/impactData";
+import { useSiteSettings } from "@/hooks/use-cms";
 
 const Hero = () => {
+  const { data: settings } = useSiteSettings();
+
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
     element?.scrollIntoView({ behavior: "smooth" });
@@ -21,7 +24,6 @@ const Hero = () => {
         entries.forEach((entry) => {
           if (!triggered && entry.isIntersecting) {
             triggered = true;
-            // Preload each image and attempt to decode so the browser caches and decodes it before dialog opens.
             try {
               (async () => {
                 await Promise.allSettled(
@@ -29,7 +31,6 @@ const Hero = () => {
                     try {
                       const img = new Image();
                       img.src = url;
-                      // return decode promise if available so we wait for the image to be decoded
                       return img.decode ? img.decode().catch(() => {}) : Promise.resolve();
                     } catch (e) {
                       return Promise.resolve();
@@ -62,32 +63,32 @@ const Hero = () => {
 
       {/* Top-centered logo (fixed within the hero area) */}
       <div className="absolute left-1/2 transform -translate-x-1/2 z-20 top-8 sm:top-6 md:top-4">
-        <img src="/img/logo.jpg" alt="Kaarai Karangal logo" className="w-28 h-28 sm:w-32 sm:h-32 md:w-40 md:h-40 object-contain mb-6" />
+        <img src={settings?.logo_url ?? "/img/logo.jpg"} alt={`${settings?.org_name ?? "Kaarai Karangal"} logo`} className="w-28 h-28 sm:w-32 sm:h-32 md:w-40 md:h-40 object-contain mb-6" />
       </div>
 
       <div className="relative max-w-4xl mx-auto space-y-10 animate-in fade-in duration-1000 z-10 text-center">
         
         {/* Organization name with gradient */}
         <h1 className="text-4xl md:text-6xl font-bold font-heading bg-gradient-to-r from-primary via-primary to-accent bg-clip-text text-transparent leading-tight mt-8 md:mt-16">
-          Kaarai Karangal
+          {settings?.org_name ?? "Kaarai Karangal"}
         </h1>
         
-        {/* Tamil quote - prominent and stylized (removed box outline) */}
+        {/* Tamil quote - prominent and stylized */}
         <div className="relative">
           <div className="absolute inset-0 bg-[var(--gradient-warm)] blur-2xl opacity-30 rounded-3xl" />
           <blockquote className="relative text-3xl md:text-5xl font-bold font-heading text-primary px-6 py-6 rounded-2xl bg-transparent backdrop-blur-sm">
-            "யாதும் ஊரே யாவரும் கேளிர்"
+            "{settings?.tagline_tamil ?? "யாதும் ஊரே யாவரும் கேளிர்"}"
           </blockquote>
         </div>
         
         {/* Translation */}
         <p className="text-xl md:text-2xl text-muted-foreground font-medium italic">
-          All towns are our home, all people our kin
+          {settings?.tagline_english ?? "All towns are our home, all people our kin"}
         </p>
         
         {/* Description with better typography */}
         <p className="text-base md:text-lg text-foreground/75 max-w-2xl mx-auto leading-relaxed px-4">
-          Serving marginalized communities across Tamil Nadu and Puducherry through food, shelter, education, and blood donation drives. All towns are our home, all people our kin.
+          {settings?.hero_description ?? "Serving marginalized communities across Tamil Nadu and Puducherry through food, shelter, education, and blood donation drives. All towns are our home, all people our kin."}
         </p>
         
         {/* CTA buttons with enhanced styling */}

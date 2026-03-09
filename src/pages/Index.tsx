@@ -8,31 +8,28 @@ import DonateBloodSection from "@/components/DonateBloodSection";
 import SponsorsSection from "@/components/SponsorsSection";
 import Footer from "@/components/Footer";
 import StickyDonate from "@/components/StickyDonate";
+import UpcomingEvents from "@/components/UpcomingEvents";
+import LatestUpdates from "@/components/LatestUpdates";
+import MediaShowcase from "@/components/MediaShowcase";
 
 const Index = () => {
   return (
     <div className="min-h-screen">
       <Hero />
       <About />
+      <LatestUpdates />
       <UpcomingEvents />
       <Services />
       <DonateBloodSection />
+      <MediaShowcase />
       <Donate />
       <Gallery />
-      {/* --- Upcoming Events Section --- */}
-      <UpcomingEvents />
-      <Volunteer />
-      {/* Sponsors section inserted below Join Our Mission */}
-      {/*
-        Place this section before Footer to show sponsors with logo placeholders.
-        You can update logo paths in SponsorsSection.tsx when available.
-      */}
       <SponsorsSection />
+      <Volunteer />
       <Footer />
       <StickyDonate />
     </div>
   );
 };
 
-import UpcomingEvents from "@/components/UpcomingEvents";
 export default Index;
