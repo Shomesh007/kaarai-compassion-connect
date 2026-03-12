@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://kaaraikarangal.com/</loc>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://kaaraikarangal.com/about</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://kaaraikarangal.com/services</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://kaaraikarangal.com/donate</loc>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://kaaraikarangal.com/gallery</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://kaaraikarangal.com/volunteer</loc>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://kaaraikarangal.com/sponsors</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://kaaraikarangal.com/fundraising</loc>
+    <priority>0.7</priority>
+  </url>
+</urlset>
