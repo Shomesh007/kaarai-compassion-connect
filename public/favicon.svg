@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <title>Kaarai Karangal</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#157a74"/>
+      <stop offset="1" stop-color="#0b3f3d"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="15" fill="url(#bg)"/>
+  <!-- Two halves of a heart meeting in the middle: many hands, one kin -->
+  <path d="M31.2 50.5C21.4 43 12.5 36.2 12.5 26.8c0-6.4 4.9-11 10.6-11 3.7 0 6.6 2 8.1 5.1z" fill="#ec6a3c"/>
+  <path d="M32.8 50.5c9.8-7.5 18.7-14.3 18.7-23.7 0-6.4-4.9-11-10.6-11-3.7 0-6.6 2-8.1 5.1z" fill="#f6b23a"/>
+  <!-- Kolam dot -->
+  <circle cx="32" cy="9.6" r="2.6" fill="#fdf3e3"/>
+</svg>
