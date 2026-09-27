@@ -1,37 +1,87 @@
-import React from "react";
+import { motion, useReducedMotion } from "framer-motion";
+import { ArrowUpRight, Droplet } from "lucide-react";
 import { useSiteSettings } from "@/hooks/use-cms";
+import { Reveal } from "@/components/motion/Reveal";
+
+const needs = ["Emergencies", "Surgeries", "Chronic illnesses"];
 
 export default function DonateBloodSection() {
   const { data: settings } = useSiteSettings();
+  const reduce = useReducedMotion();
 
   return (
-    <section className="relative py-20 px-4 bg-gradient-to-br from-red-100 via-white to-accent/10 overflow-hidden">
-      <div className="max-w-3xl mx-auto">
-        <div className="glass-effect rounded-3xl p-10 md:p-14 shadow-[var(--shadow-soft)] border-4 border-red-400/30 bg-white/60 backdrop-blur-lg relative z-20">
-          <div className="md:hidden">
-            <h2 className="text-4xl font-bold font-heading bg-gradient-to-r from-red-600 via-primary to-accent bg-clip-text text-transparent mb-4 drop-shadow-lg text-center">
-              Donate Blood, Save Lives
-            </h2>
-            <div className="h-1 w-32 mx-auto bg-gradient-to-r from-transparent via-red-500 to-transparent rounded-full mb-8" />
+    <section id="blood-donation" className="relative overflow-hidden bg-gradient-to-br from-[#7a0f1c] via-[#a3162a] to-[#c2410c] py-14 text-white md:py-24 lg:py-28">
+      <div className="pointer-events-none absolute inset-0 bg-kolam-light opacity-40" />
+
+      {/* Heartbeat line */}
+      <svg
+        className="pointer-events-none absolute inset-x-0 top-1/2 h-40 w-full -translate-y-1/2 opacity-25"
+        viewBox="0 0 1200 160"
+        preserveAspectRatio="none"
+        aria-hidden="true"
+      >
+        <motion.path
+          d="M0 80 H380 L410 80 L430 30 L455 140 L480 10 L505 120 L525 80 H760 L785 80 L800 50 L820 110 L840 80 H1200"
+          fill="none"
+          stroke="white"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          initial={{ pathLength: reduce ? 1 : 0 }}
+          whileInView={{ pathLength: 1 }}
+          viewport={{ once: false, amount: 0.5 }}
+          transition={{ duration: 2.4, ease: "easeInOut" }}
+        />
+      </svg>
+
+      <div className="relative mx-auto grid max-w-7xl items-center gap-14 px-5 sm:px-8 lg:grid-cols-12">
+        <Reveal className="order-2 lg:order-1 lg:col-span-7">
+          <div className="flex items-center gap-3">
+            <span className="relative grid h-10 w-10 shrink-0 place-items-center rounded-full bg-white/15 md:hidden">
+              <span className="absolute inset-0 animate-pulse-ring rounded-full bg-white/30" />
+              <Droplet className="relative h-5 w-5" fill="currentColor" />
+            </span>
+            <span className="eyebrow text-white/80">Donate blood, save lives</span>
           </div>
-          <p className="text-lg md:text-xl text-foreground/85 mb-6 leading-relaxed">
-            Every drop donated is a gift of life. Blood donation supports patients in emergencies, surgeries, and chronic illnesses. By volunteering, you become a hero in someone's story and inspire a wave of compassion.
+          <h2 className="mt-4 font-display text-[2.1rem] font-medium leading-[1.05] tracking-tight text-balance sm:text-5xl md:text-6xl">
+            Be the reason someone gets a <em className="text-amber-200">second chance</em>.
+          </h2>
+          <p className="mt-4 max-w-xl text-base leading-relaxed text-white/80 md:mt-6 md:text-lg">
+            Every drop donated is a gift of life. By volunteering, you become a hero in someone’s story and inspire a wave of
+            compassion that strengthens our whole community.
           </p>
-          <p className="text-md md:text-lg text-muted-foreground mb-8">
-            Volunteering for blood donation strengthens community bonds and builds a culture of care. Your contribution matters—be the reason someone gets a second chance.
-          </p>
+          <ul className="mt-5 flex flex-wrap gap-2 md:mt-7">
+            {needs.map((n) => (
+              <li key={n} className="rounded-full border border-white/25 bg-white/10 px-3 py-1 text-xs font-medium backdrop-blur md:px-4 md:py-1.5 md:text-sm">
+                {n}
+              </li>
+            ))}
+          </ul>
           <a
             href={settings?.blood_donation_url ?? "https://kaaraikarangal.netlify.app/"}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-block bg-gradient-to-r from-red-600 via-primary to-accent text-white font-semibold px-10 py-4 rounded-xl shadow-lg transition-all duration-300 scale-100 hover:scale-105 hover:shadow-xl hover:ring-4 hover:ring-red-400/40 hover:ring-offset-2 hover:ring-offset-white"
+            className="btn-shine group mt-7 flex w-full items-center justify-center gap-3 rounded-full bg-white px-8 py-4 md:mt-10 md:inline-flex md:h-14 md:w-auto md:py-0 text-base font-semibold text-[#a3162a] shadow-[0_20px_40px_-16px_rgba(0,0,0,0.5)] transition-transform hover:-translate-y-0.5"
           >
             Volunteer to Donate Blood
+            <ArrowUpRight className="h-5 w-5 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
           </a>
-        </div>
-        {/* Floating blurred accent shapes */}
-        <div className="absolute top-10 left-10 w-32 h-32 bg-red-400/10 rounded-full blur-3xl animate-float" />
-        <div className="absolute bottom-10 right-10 w-40 h-40 bg-primary/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '2s' }} />
+        </Reveal>
+
+        <Reveal direction="left" className="order-1 hidden justify-center md:flex lg:order-2 lg:col-span-5">
+          <div className="relative grid h-64 w-64 place-items-center sm:h-80 sm:w-80">
+            <span className="absolute inset-0 animate-pulse-ring rounded-full border-2 border-white/40" />
+            <span className="absolute inset-0 animate-pulse-ring rounded-full border-2 border-white/30" style={{ animationDelay: "0.8s" }} />
+            <span className="absolute inset-0 animate-pulse-ring rounded-full border-2 border-white/20" style={{ animationDelay: "1.6s" }} />
+            <motion.div
+              animate={reduce ? undefined : { scale: [1, 1.08, 1, 1.12, 1] }}
+              transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+              className="grid h-40 w-40 place-items-center rounded-full bg-white/15 shadow-[inset_0_0_40px_rgba(255,255,255,0.2)] backdrop-blur-md sm:h-48 sm:w-48"
+            >
+              <Droplet className="h-20 w-20 text-white drop-shadow-lg sm:h-24 sm:w-24" fill="currentColor" />
+            </motion.div>
+          </div>
+        </Reveal>
       </div>
     </section>
   );

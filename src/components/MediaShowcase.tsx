@@ -2,7 +2,8 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { useMediaGallery } from "@/hooks/use-cms";
 import { Play, ChevronLeft, ChevronRight, X, Camera, Film } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import type { MediaItem } from "@/lib/cms-types";
+import SectionHeading from "@/components/motion/SectionHeading";
+import { Reveal } from "@/components/motion/Reveal";
 
 /**
  * MediaShowcase — A cinematic media gallery with filmstrip navigation,
@@ -93,11 +94,7 @@ const MediaShowcase = () => {
     <section
       ref={sectionRef}
       id="media-showcase"
-      className="relative py-24 px-4 overflow-hidden"
-      style={{
-        background:
-          "linear-gradient(180deg, hsl(25 18% 8%) 0%, hsl(25 20% 12%) 40%, hsl(178 30% 10%) 100%)",
-      }}
+      className="relative overflow-hidden bg-ink px-5 py-14 sm:px-8 md:py-24 lg:py-32"
     >
       {/* Ambient glow behind the spotlight */}
       <div
@@ -117,41 +114,34 @@ const MediaShowcase = () => {
         }}
       />
 
-      <div className="relative max-w-5xl mx-auto z-10">
-        {/* Section header */}
-        <div className="text-center mb-14">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm mb-5">
-            <Film className="w-4 h-4 text-accent" />
-            <span className="text-xs font-semibold text-white/70 tracking-widest uppercase">
-              Media Gallery
-            </span>
-          </div>
-          <h2 className="text-4xl md:text-5xl font-bold font-heading text-white mb-3">
-            Moments That{" "}
-            <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-              Matter
-            </span>
-          </h2>
-          <p className="text-base text-white/50 max-w-lg mx-auto">
-            Images and videos capturing our journey of service and compassion
-          </p>
-        </div>
+      <div className="relative z-10 mx-auto max-w-6xl">
+        <SectionHeading
+          tone="dark"
+          eyebrow="Media gallery"
+          title={
+            <>
+              Moments that <em className="text-saffron">matter</em>.
+            </>
+          }
+          description="Images and videos capturing our journey of service and compassion."
+          className="mb-8 md:mb-14"
+        />
 
         {/* Spotlight / Hero area */}
-        <div className="relative group">
+        <Reveal className="relative group">
           {/* Navigation arrows */}
           {items.length > 1 && (
             <>
               <button
                 onClick={goPrev}
-                className="absolute left-2 md:-left-5 top-1/2 -translate-y-1/2 z-20 w-10 h-10 md:w-12 md:h-12 rounded-full bg-black/40 backdrop-blur-md border border-white/10 flex items-center justify-center text-white/80 hover:text-white hover:bg-black/60 transition-all duration-300 opacity-0 group-hover:opacity-100"
+                className="absolute left-2 md:-left-5 top-1/2 -translate-y-1/2 z-20 w-10 h-10 md:w-12 md:h-12 rounded-full bg-black/40 backdrop-blur-md border border-white/10 flex items-center justify-center text-white/80 hover:text-white hover:bg-black/60 transition-all duration-300 md:opacity-0 md:group-hover:opacity-100"
                 aria-label="Previous"
               >
                 <ChevronLeft className="w-5 h-5" />
               </button>
               <button
                 onClick={goNext}
-                className="absolute right-2 md:-right-5 top-1/2 -translate-y-1/2 z-20 w-10 h-10 md:w-12 md:h-12 rounded-full bg-black/40 backdrop-blur-md border border-white/10 flex items-center justify-center text-white/80 hover:text-white hover:bg-black/60 transition-all duration-300 opacity-0 group-hover:opacity-100"
+                className="absolute right-2 md:-right-5 top-1/2 -translate-y-1/2 z-20 w-10 h-10 md:w-12 md:h-12 rounded-full bg-black/40 backdrop-blur-md border border-white/10 flex items-center justify-center text-white/80 hover:text-white hover:bg-black/60 transition-all duration-300 md:opacity-0 md:group-hover:opacity-100"
                 aria-label="Next"
               >
                 <ChevronRight className="w-5 h-5" />
@@ -161,7 +151,7 @@ const MediaShowcase = () => {
 
           {/* Main display */}
           <div
-            className="relative aspect-[16/9] md:aspect-[2.2/1] rounded-3xl overflow-hidden border-2 border-white/10 cursor-pointer"
+            className="relative aspect-[4/3] sm:aspect-[16/9] md:aspect-[2.2/1] rounded-3xl md:rounded-[2rem] overflow-hidden border border-white/10 cursor-pointer"
             onClick={() => setLightboxOpen(true)}
             style={{
               boxShadow:
@@ -175,6 +165,7 @@ const MediaShowcase = () => {
                   <img
                     src={activeItem.thumbnail_url}
                     alt={activeItem.title}
+                    onError={(e) => (e.currentTarget.style.display = "none")}
                     className={`w-full h-full object-cover transition-opacity duration-500 ${
                       isTransitioning ? "opacity-0" : "opacity-100"
                     }`}
@@ -187,18 +178,26 @@ const MediaShowcase = () => {
                 </div>
               </div>
             ) : (
-              // Image
-              <img
-                src={activeItem?.url ?? ""}
-                alt={activeItem?.title ?? ""}
-                className={`w-full h-full object-cover transition-all duration-500 ${
-                  isTransitioning ? "opacity-0 scale-105" : "opacity-100 scale-100"
-                }`}
-              />
+              // Image over a blurred copy of itself so nothing important is cropped
+              <div className="relative h-full w-full bg-black">
+                <img
+                  src={activeItem?.url ?? ""}
+                  alt=""
+                  aria-hidden="true"
+                  className="absolute inset-0 h-full w-full scale-110 object-cover opacity-50 blur-2xl"
+                />
+                <img
+                  src={activeItem?.url ?? ""}
+                  alt={activeItem?.title ?? ""}
+                  className={`relative h-full w-full object-contain transition-all duration-500 ${
+                    isTransitioning ? "opacity-0 scale-105" : "opacity-100 scale-100"
+                  }`}
+                />
+              </div>
             )}
 
             {/* Bottom gradient overlay with title */}
-            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-6 md:p-8">
+            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-4 md:p-8">
               <div className="flex items-center gap-2 mb-2">
                 {activeItem?.media_type === "video" ? (
                   <Film className="w-4 h-4 text-accent" />
@@ -209,10 +208,10 @@ const MediaShowcase = () => {
                   {activeItem?.media_type === "video" ? "Video" : "Photo"}
                 </span>
               </div>
-              <h3 className="text-xl md:text-2xl font-bold text-white mb-1">
+              <h3 className="mb-1 font-display text-xl font-medium text-white sm:text-2xl md:text-4xl">
                 {activeItem?.title}
               </h3>
-              <p className="text-sm text-white/60 max-w-lg">
+              <p className="hidden max-w-lg text-sm text-white/60 sm:block">
                 {activeItem?.description}
               </p>
             </div>
@@ -222,10 +221,10 @@ const MediaShowcase = () => {
               {activeIndex + 1} / {items.length}
             </div>
           </div>
-        </div>
+        </Reveal>
 
         {/* Filmstrip thumbnails */}
-        <div className="mt-6 relative">
+        <div className="mt-4 relative md:mt-6">
           <div
             ref={stripRef}
             className="flex gap-3 overflow-x-auto pb-2 px-1 scrollbar-hide"
@@ -235,9 +234,9 @@ const MediaShowcase = () => {
               <button
                 key={item.id}
                 onClick={() => selectItem(idx)}
-                className={`relative flex-shrink-0 w-20 h-14 md:w-28 md:h-20 rounded-xl overflow-hidden border-2 transition-all duration-300 ${
+                className={`relative flex-shrink-0 w-16 h-12 md:w-28 md:h-20 rounded-xl overflow-hidden border-2 transition-all duration-300 ${
                   idx === activeIndex
-                    ? "border-primary ring-2 ring-primary/30 scale-105"
+                    ? "border-saffron ring-2 ring-saffron/30 scale-105"
                     : "border-white/10 hover:border-white/30 opacity-60 hover:opacity-100"
                 }`}
               >
@@ -246,8 +245,9 @@ const MediaShowcase = () => {
                     {item.thumbnail_url && (
                       <img
                         src={item.thumbnail_url}
-                        alt={item.title}
+                        alt=""
                         className="w-full h-full object-cover"
+                        onError={(e) => (e.currentTarget.style.display = "none")}
                       />
                     )}
                     <div className="absolute inset-0 flex items-center justify-center bg-black/30">

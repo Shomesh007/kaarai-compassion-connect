@@ -1,100 +1,148 @@
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { ShieldCheck, PieChart } from "lucide-react";
-import { useSiteSettings, useDonationBreakdown } from "@/hooks/use-cms";
+import { motion } from "framer-motion";
+import { Heart, Mail, Phone, ShieldCheck } from "lucide-react";
+import { useDonationBreakdown, useSiteSettings } from "@/hooks/use-cms";
+import SectionHeading from "@/components/motion/SectionHeading";
+import { EASE_OUT } from "@/components/motion/variants";
+import { Reveal } from "@/components/motion/Reveal";
+
+const barColors = ["hsl(var(--primary))", "hsl(var(--accent))", "hsl(var(--saffron))", "hsl(var(--muted-foreground))"];
 
 const Donate = () => {
   const { data: settings } = useSiteSettings();
   const { data: breakdown } = useDonationBreakdown();
 
+  const items = breakdown ?? [];
+  const email = settings?.email ?? "kaaraikarangal@gmail.com";
+  const phoneTel = settings?.phone_tel ?? "+918220573306";
+  const phoneDisplay = settings?.phone_display ?? "+91 82205 73306";
+
+  // Donut geometry
+  const radius = 70;
+  const circumference = 2 * Math.PI * radius;
+  const total = items.reduce((sum, i) => sum + Number(i.percent), 0) || 100;
+  let offset = 0;
+
   return (
-    <section id="donate" className="relative py-20 px-4 overflow-hidden">
-      {/* Background elements */}
-      <div className="absolute inset-0 bg-gradient-to-br from-card via-background to-secondary/30" />
-      <div className="absolute top-10 left-10 w-72 h-72 bg-accent/10 rounded-full blur-3xl animate-float" />
-      <div className="absolute bottom-10 right-10 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '3s' }} />
+    <section id="donate" className="relative overflow-hidden py-14 md:py-24 lg:py-32">
+      <div className="pointer-events-none absolute left-1/2 top-0 h-[30rem] w-[60rem] -translate-x-1/2 rounded-full bg-accent/10 blur-[120px]" />
+      <div className="relative mx-auto max-w-7xl px-5 sm:px-8">
+        <SectionHeading
+          eyebrow="Make a difference"
+          title={
+            <>
+              Your kindness, <em className="text-accent">multiplied</em>.
+            </>
+          }
+          description="Every rupee goes toward serving those in need. Here’s exactly how your donation helps."
+        />
 
-      <div className="relative max-w-4xl mx-auto z-10">
-        {/* Section header */}
-        <div className="text-center mb-12 md:hidden">
-          <div className="inline-block">
-            <h2 className="text-4xl md:text-5xl font-bold font-heading text-foreground mb-3 relative">
-              Make a Difference
-              <div className="absolute -bottom-2 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-accent to-transparent" />
-            </h2>
-          </div>
-          <p className="text-lg text-muted-foreground mt-6">Your support transforms lives</p>
-        </div>
-
-        <Card className="p-8 md:p-12 glass-effect shadow-[var(--shadow-strong)] border-2 border-primary/10 rounded-3xl">
-          <div className="space-y-8">
-            {/* Trust badge */}
-            <div className="flex items-start gap-4 bg-gradient-to-r from-primary/10 to-accent/10 p-6 rounded-2xl border-2 border-primary/20">
-              <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center flex-shrink-0">
-                <ShieldCheck className="w-6 h-6 text-primary" />
-              </div>
-              <div>
-                <p className="font-bold text-lg text-foreground">Registered NGO</p>
-                <p className="text-sm text-muted-foreground">
-                  {settings?.registration_info ?? "Registration No. 31/2025 — Registered on fourth february 2025"}
-                </p>
-              </div>
-            </div>
-
-            {/* Funding breakdown */}
-            <div className="space-y-6">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-xl bg-accent/20 flex items-center justify-center">
-                  <PieChart className="w-5 h-5 text-accent" />
+        <div className="mt-8 grid gap-4 md:mt-16 md:gap-6 lg:grid-cols-12">
+          {/* Breakdown */}
+          <Reveal className="surface flex flex-col p-5 sm:p-10 lg:col-span-7">
+            <div className="grid flex-1 items-center gap-10 sm:grid-cols-[auto_1fr]">
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground sm:hidden">Where your gift goes</p>
+              <div className="relative mx-auto hidden h-48 w-48 sm:block">
+                <svg viewBox="0 0 180 180" className="h-full w-full -rotate-90">
+                  <circle cx="90" cy="90" r={radius} fill="none" stroke="hsl(var(--muted))" strokeWidth="18" />
+                  {items.map((item, idx) => {
+                    const length = (Number(item.percent) / total) * circumference;
+                    const dashOffset = -offset;
+                    offset += length;
+                    return (
+                      <motion.circle
+                        key={item.id ?? idx}
+                        cx="90"
+                        cy="90"
+                        r={radius}
+                        fill="none"
+                        stroke={barColors[idx % barColors.length]}
+                        strokeWidth="18"
+                        strokeDashoffset={dashOffset}
+                        initial={{ strokeDasharray: `0 ${circumference}` }}
+                        whileInView={{ strokeDasharray: `${Math.max(length - 3, 0)} ${circumference}` }}
+                        viewport={{ once: true, amount: 0.6 }}
+                        transition={{ duration: 1.2, delay: 0.2 + idx * 0.15, ease: EASE_OUT }}
+                      />
+                    );
+                  })}
+                </svg>
+                <div className="absolute inset-0 grid place-items-center text-center">
+                  <div>
+                    <Heart className="mx-auto h-6 w-6 text-accent" fill="currentColor" />
+                    <p className="mt-1 text-xs font-semibold uppercase tracking-widest text-muted-foreground">Your gift</p>
+                  </div>
                 </div>
-                <p className="text-xl font-bold text-foreground">How Your Donation Helps</p>
               </div>
-              <div className="space-y-4">
-                {(breakdown ?? []).map((item, idx) => (
-                  <div key={item.id ?? idx} className="space-y-2">
-                    <div className="flex justify-between items-center text-sm">
-                      <span className="font-medium text-foreground">{item.label}</span>
-                      <span className="font-bold text-primary">{item.percent}%</span>
+
+              <ul className="-mt-6 space-y-4 sm:mt-0 sm:space-y-5">
+                {items.map((item, idx) => (
+                  <li key={item.id ?? idx}>
+                    <div className="flex items-center justify-between gap-3 text-sm">
+                      <span className="flex items-center gap-2.5 font-medium text-foreground">
+                        <span className="h-2.5 w-2.5 rounded-full" style={{ background: barColors[idx % barColors.length] }} />
+                        {item.label}
+                      </span>
+                      <span className="font-display text-xl font-medium text-foreground">{item.percent}%</span>
                     </div>
-                    <div className="h-2 bg-muted rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-gradient-to-r from-primary to-accent rounded-full transition-all duration-1000"
-                        style={{ width: `${item.percent}%` }}
+                    <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-muted">
+                      <motion.div
+                        className="h-full rounded-full"
+                        style={{ background: barColors[idx % barColors.length] }}
+                        initial={{ width: 0 }}
+                        whileInView={{ width: `${item.percent}%` }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 1.2, delay: 0.2 + idx * 0.12, ease: EASE_OUT }}
                       />
                     </div>
-                  </div>
+                  </li>
                 ))}
+              </ul>
+            </div>
+            <div className="mt-6 grid gap-3 border-t border-border/70 pt-5 sm:mt-10 sm:grid-cols-2 sm:gap-4 sm:pt-8">
+              <p className="flex items-start gap-3 text-xs text-muted-foreground sm:text-sm">
+                <ShieldCheck className="h-5 w-5 shrink-0 text-primary" />
+                Complete transparency and accountability in every rupee spent.
+              </p>
+              <p className="flex items-start gap-3 text-xs text-muted-foreground sm:text-sm">
+                <Heart className="h-5 w-5 shrink-0 text-accent" />
+                Every contribution goes directly toward serving those in need.
+              </p>
+            </div>
+          </Reveal>
+
+          {/* CTA card */}
+          <Reveal delay={0.1} className="relative overflow-hidden rounded-3xl bg-ink p-5 text-white shadow-[var(--shadow-strong)] sm:p-10 lg:col-span-5">
+            <div className="pointer-events-none absolute inset-0 bg-kolam-light opacity-60" />
+            <div className="pointer-events-none absolute -bottom-24 -right-24 h-72 w-72 rounded-full bg-accent/40 blur-3xl" />
+            <div className="relative flex h-full flex-col">
+              <div className="flex items-start gap-3 rounded-2xl border border-white/10 bg-white/5 p-4 md:gap-4 md:p-5">
+                <ShieldCheck className="h-6 w-6 shrink-0 text-saffron" />
+                <div>
+                  <p className="font-semibold">Registered NGO</p>
+                  <p className="mt-1 text-xs text-white/60 md:text-sm">
+                    {settings?.registration_info ?? "Registration No. 31/2025 — Registered on fourth february 2025"}
+                  </p>
+                </div>
+              </div>
+              <p className="mt-6 text-xs font-semibold uppercase tracking-widest text-white/50 md:mt-8 md:text-sm">UPI or bank transfer</p>
+              <p className="mt-2 font-display text-xl font-medium leading-tight md:text-3xl">Contact us for payment details — we’ll guide you through.</p>
+              <div className="mt-auto grid grid-cols-2 gap-2.5 pt-6 md:flex md:flex-col md:gap-3 md:pt-10">
+                <a
+                  href={`mailto:${email}?subject=Donation Inquiry`}
+                  className="btn-shine inline-flex h-12 items-center justify-center gap-2 rounded-full bg-accent px-4 text-sm font-semibold md:h-14 md:px-6 md:text-base text-accent-foreground transition-transform hover:-translate-y-0.5"
+                >
+                  <Mail className="h-5 w-5" /> <span className="md:hidden">Email</span><span className="hidden md:inline">Donate via email</span>
+                </a>
+                <a
+                  href={`tel:${phoneTel}`}
+                  className="inline-flex h-12 items-center justify-center gap-2 rounded-full border border-white/20 px-4 text-sm font-semibold md:h-14 md:px-6 md:text-base transition-colors hover:bg-white hover:text-ink"
+                >
+                  <Phone className="h-5 w-5" /> <span className="md:hidden">Call</span><span className="hidden md:inline">Call {phoneDisplay}</span>
+                </a>
               </div>
             </div>
-
-            {/* CTA section */}
-            <div className="pt-6 space-y-6">
-              <div className="bg-gradient-to-br from-primary/5 via-accent/5 to-primary/5 p-6 rounded-2xl text-center border border-primary/10">
-                <p className="text-sm text-muted-foreground mb-2">Donate via UPI or Bank Transfer</p>
-                <p className="text-lg font-bold text-foreground">Contact us for payment details</p>
-              </div>
-
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Button
-                  variant="donate"
-                  size="lg"
-                  className="flex-1 group relative overflow-hidden hidden sm:flex"
-                  onClick={() => window.location.href = `mailto:${settings?.email ?? 'kaaraikarangal@gmail.com'}?subject=Donation Inquiry`}
-                >
-                  <span className="relative z-10">Donate Now</span>
-                </Button>
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="flex-1 border-2 hover:border-primary hover:bg-primary/5 w-full text-lg py-3 sm:py-0 sm:w-auto"
-                  onClick={() => window.location.href = `tel:${settings?.phone_tel ?? '+918220573306'}`}
-                >
-                  Call to Donate
-                </Button>
-              </div>
-            </div>
-          </div>
-        </Card>
+          </Reveal>
+        </div>
       </div>
     </section>
   );

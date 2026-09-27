@@ -3,12 +3,14 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { MotionConfig } from "framer-motion";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { AdminAuthProvider } from "@/lib/admin-auth";
 
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
+import Credits from "./pages/Credits";
 import AdminLogin from "./pages/AdminLogin";
 import AdminLayout from "./pages/AdminLayout";
 import Dashboard from "./pages/admin/Dashboard";
@@ -27,10 +29,12 @@ import AdminVolunteers from "./pages/admin/AdminVolunteers";
 const queryClient = new QueryClient();
 
 function ScrollToTop() {
-  const { pathname } = useLocation();
+  const { pathname, hash } = useLocation();
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    // Deep links with a hash (e.g. /#donate) are scrolled by the page itself
+    if (!hash) window.scrollTo(0, 0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
   // Also scroll on initial mount
@@ -43,6 +47,7 @@ function ScrollToTop() {
 
 const App = () => (
   <ErrorBoundary>
+    <MotionConfig reducedMotion="user">
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <Toaster />
@@ -52,6 +57,7 @@ const App = () => (
           <AdminAuthProvider>
             <Routes>
               <Route path="/" element={<Index />} />
+              <Route path="/credits" element={<Credits />} />
 
               {/* Admin routes */}
               <Route path="/admin/login" element={<AdminLogin />} />
@@ -77,6 +83,7 @@ const App = () => (
         </BrowserRouter>
       </TooltipProvider>
     </QueryClientProvider>
+    </MotionConfig>
   </ErrorBoundary>
 );
 

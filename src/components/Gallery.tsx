@@ -1,199 +1,195 @@
-import { useState, useEffect, useRef } from "react";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogTrigger, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-  type CarouselApi,
-} from "@/components/ui/carousel";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { ChevronLeft, ChevronRight, Expand, X } from "lucide-react";
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { useImpactCategories } from "@/hooks/use-cms";
-import type { ImpactCategory } from "@/lib/cms-types";
+import SectionHeading from "@/components/motion/SectionHeading";
+import { EASE_OUT } from "@/components/motion/variants";
+import { cn } from "@/lib/utils";
+import SwipeRow from "@/components/motion/SwipeRow";
 
 const Gallery = () => {
-  const [isExpanded, setIsExpanded] = useState(false);
   const { data: impactCategories } = useImpactCategories();
-  const categories = impactCategories ?? [];
-  const visibleCategories = isExpanded ? categories : categories.slice(0, 2);
+  const categories = (impactCategories ?? []).filter((c) => c.images.length > 0);
+  const [activeId, setActiveId] = useState<number | null>(null);
+  const [lightbox, setLightbox] = useState<number | null>(null);
 
-  // Small inner component for dialog content so it can use hooks per image instance.
-  const ImagePreview = ({ image }: { image: { url: string; caption: string } }) => {
-    const [loaded, setLoaded] = useState(false);
+  const active = categories.find((c) => c.id === activeId) ?? categories[0];
+  const images = active?.images ?? [];
 
-    return (
-      <DialogContent className="max-w-lg p-0 bg-background">
-        <DialogHeader>
-          <DialogTitle>{image.caption}</DialogTitle>
-          <DialogDescription>Image preview — click close or outside to dismiss.</DialogDescription>
-        </DialogHeader>
-        <div className="relative bg-black/5 flex items-center justify-center min-h-[40vh]">
-          <img
-            src={image.url}
-            alt={image.caption}
-            className={`w-full h-auto max-h-[80vh] object-contain transition-opacity duration-300 ${loaded ? 'opacity-100' : 'opacity-0'}`}
-            loading="eager"
-            fetchPriority="high"
-            decoding="async"
-            onLoad={() => setLoaded(true)}
-            onError={(e) => {
-              const t = e.currentTarget as HTMLImageElement;
-              t.src = '/img/placeholder.png';
-              setLoaded(true);
-            }}
-          />
+  const step = useCallback(
+    (dir: 1 | -1) => setLightbox((i) => (i === null ? i : (i + dir + images.length) % images.length)),
+    [images.length],
+  );
 
-          {!loaded && (
-            <div className="absolute">
-              <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin" />
-            </div>
-          )}
+  useEffect(() => {
+    if (lightbox === null) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "ArrowRight") step(1);
+      if (e.key === "ArrowLeft") step(-1);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [lightbox, step]);
 
-        </div>
-        <div className="p-4 bg-card">
-          <p className="text-sm text-foreground">{image.caption}</p>
-        </div>
-      </DialogContent>
-    );
-  };
-
-  // Inner component to handle per-category carousel autoplay every 3 seconds.
-  const CategoryCarousel = ({ category }: { category: ImpactCategory }) => {
-    const [api, setApi] = useState<CarouselApi | null>(null);
-    const containerRef = useRef<HTMLDivElement | null>(null);
-    const [isVisible, setIsVisible] = useState(false);
-
-    // Observe whether the carousel wrapper is in viewport. Only autoplay when visible.
-    useEffect(() => {
-      const el = containerRef.current;
-      if (!el || typeof IntersectionObserver === "undefined") return;
-
-      const obs = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => setIsVisible(entry.isIntersecting && entry.intersectionRatio > 0.4));
-        },
-        { threshold: [0, 0.4, 0.75] },
-      );
-
-      obs.observe(el);
-      return () => obs.disconnect();
-    }, []);
-
-    // Autoplay effect: only when api is available and carousel is visible
-    useEffect(() => {
-      if (!api || !isVisible) return;
-
-      const interval = setInterval(() => {
-        try {
-          if (api.canScrollNext && api.canScrollNext()) {
-            api.scrollNext();
-          } else if (api.scrollTo) {
-            api.scrollTo(0);
-          }
-        } catch (e) {
-          // ignore errors
-        }
-      }, 3000);
-
-      return () => clearInterval(interval);
-    }, [api, isVisible]);
-
-    return (
-      <div ref={containerRef}>
-        <Carousel
-          opts={{
-            align: "start",
-            loop: true,
-          }}
-          className="w-full px-4 md:px-0"
-          setApi={(a: CarouselApi) => setApi(a)}
-        >
-          <CarouselContent className="-ml-2 md:-ml-4">
-            {category.images.map((image, index) => (
-              <CarouselItem key={image.id ?? index} className="pl-2 md:pl-4 basis-[85%] sm:basis-1/2 lg:basis-1/3">
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Card
-                      className="overflow-hidden cursor-pointer group border-border hover:shadow-[var(--shadow-hover)] transition-all duration-300"
-                    >
-                      <div className="relative aspect-square">
-                        <img
-                          src={image.url}
-                          alt={image.caption}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
-                          <p className="text-white text-sm font-medium">
-                            {image.caption}
-                          </p>
-                        </div>
-                      </div>
-                    </Card>
-                  </DialogTrigger>
-                  <ImagePreview image={image} />
-                </Dialog>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          <CarouselPrevious className="-left-4 md:-left-12" />
-          <CarouselNext className="-right-4 md:-right-12" />
-        </Carousel>
-      </div>
-    );
-  };
+  if (!active) return null;
+  const current = lightbox !== null ? images[lightbox] : null;
 
   return (
-    <section id="gallery" className="py-16 px-4 bg-card">
-      <div className="max-w-6xl mx-auto">
-        <div className="md:hidden">
-          <h2 className="text-3xl font-bold font-['Poppins'] text-center mb-4 text-foreground">
-            Our Impact
-          </h2>
-          <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
-            Moments of compassion in action across our communities
-          </p>
-        </div>
+    <section id="gallery" className="relative py-14 md:py-24 lg:py-32">
+      <div className="mx-auto max-w-7xl px-5 sm:px-8">
+        <SectionHeading
+          eyebrow="Our impact"
+          title={
+            <>
+              Compassion, <em className="text-primary">in action</em>.
+            </>
+          }
+          description="Real moments from our programs across Karaikal and beyond."
+        />
 
-        <div className="space-y-12">
-          {visibleCategories.map((category) => (
-            <div key={category.id} className="space-y-4">
-              <div className="text-center space-y-2">
-                <h3 className="text-xl md:text-2xl font-semibold text-foreground">
-                  {category.title}
-                </h3>
-                <p className="text-sm text-muted-foreground">
-                  {category.description}
-                </p>
-              </div>
-
-              <CategoryCarousel category={category} />
-            </div>
-          ))}
-        </div>
-
-        {categories.length > 2 && (
-          <div className="flex justify-center pt-8">
-            <Button
-              variant="ghost"
-              onClick={() => setIsExpanded(!isExpanded)}
-              className="gap-2"
-            >
-              {isExpanded ? (
-                <>
-                  Show Less <ChevronUp className="w-4 h-4" />
-                </>
-              ) : (
-                <>
-                  View More Impact Stories <ChevronDown className="w-4 h-4" />
-                </>
-              )}
-            </Button>
+        {/* Category tabs */}
+        <div className="no-scrollbar -mx-5 mt-7 overflow-x-auto px-5 md:mt-12">
+          <div role="tablist" className="flex w-max gap-1 md:mx-auto rounded-full border border-border/70 bg-card p-1.5 shadow-[var(--shadow-soft)]">
+            {categories.map((c) => {
+              const selected = c.id === active.id;
+              return (
+                <button
+                  key={c.id}
+                  role="tab"
+                  aria-selected={selected}
+                  onClick={() => setActiveId(c.id)}
+                  className={cn(
+                    "relative whitespace-nowrap rounded-full px-4 py-2 text-xs font-semibold transition-colors md:px-5 md:py-2.5 md:text-sm",
+                    selected ? "text-primary-foreground" : "text-muted-foreground hover:text-foreground",
+                  )}
+                >
+                  {selected && (
+                    <motion.span
+                      layoutId="gallery-tab"
+                      className="absolute inset-0 rounded-full bg-primary"
+                      transition={{ type: "spring", stiffness: 380, damping: 32 }}
+                    />
+                  )}
+                  <span className="relative">{c.title}</span>
+                </button>
+              );
+            })}
           </div>
-        )}
+        </div>
+
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={active.id}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.5, ease: EASE_OUT }}
+          >
+            {active.description && (
+              <p className="mt-4 max-w-2xl text-sm text-muted-foreground md:mx-auto md:mt-6 md:text-center md:text-base">{active.description}</p>
+            )}
+            {/* Phones: swipeable photo cards */}
+            <SwipeRow className="mt-5 md:hidden" itemWidth="w-[78%]">
+              {images.map((image, i) => (
+                <button
+                  key={image.id ?? i}
+                  onClick={() => setLightbox(i)}
+                  className="relative block aspect-[4/5] w-full overflow-hidden rounded-3xl bg-muted text-left"
+                >
+                  <img src={image.url} alt={image.caption} loading="lazy" className="h-full w-full object-cover" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-ink/85 via-transparent to-transparent" />
+                  <span className="absolute left-3 top-3 rounded-full bg-ink/50 px-2.5 py-1 font-mono text-[0.65rem] text-white backdrop-blur">
+                    {i + 1}/{images.length}
+                  </span>
+                  <p className="absolute inset-x-0 bottom-0 p-4 text-sm font-medium leading-snug text-white">{image.caption}</p>
+                </button>
+              ))}
+            </SwipeRow>
+
+            <div className="mt-10 hidden columns-2 gap-3 sm:gap-4 md:block lg:columns-3">
+              {images.map((image, i) => (
+                <motion.button
+                  key={image.id ?? i}
+                  initial={{ opacity: 0, scale: 0.94 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.6, delay: i * 0.06, ease: EASE_OUT }}
+                  onClick={() => setLightbox(i)}
+                  className="group relative mb-3 block w-full break-inside-avoid overflow-hidden rounded-2xl bg-muted text-left sm:mb-4"
+                >
+                  <img
+                    src={image.url}
+                    alt={image.caption}
+                    loading="lazy"
+                    className="h-auto w-full transition-transform duration-700 ease-out group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/10 to-transparent opacity-70 transition-opacity duration-500 group-hover:opacity-100" />
+                  <p className="absolute bottom-0 left-0 right-0 translate-y-2 p-4 text-sm font-medium text-white opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
+                    {image.caption}
+                  </p>
+                  <span className="absolute right-3 top-3 grid h-9 w-9 scale-75 place-items-center rounded-full bg-white/90 text-ink opacity-0 transition-all duration-300 group-hover:scale-100 group-hover:opacity-100">
+                    <Expand className="h-4 w-4" />
+                  </span>
+                </motion.button>
+              ))}
+            </div>
+          </motion.div>
+        </AnimatePresence>
       </div>
+
+      <Dialog open={lightbox !== null} onOpenChange={(o) => !o && setLightbox(null)}>
+        <DialogContent className="max-w-5xl gap-0 overflow-hidden border-white/10 bg-ink p-0 text-white [&>button]:hidden">
+          <DialogTitle className="sr-only">{current?.caption ?? "Image"}</DialogTitle>
+          <DialogDescription className="sr-only">Use the arrow keys to browse images.</DialogDescription>
+          <div className="relative flex min-h-[50vh] items-center justify-center bg-black">
+            <AnimatePresence mode="wait">
+              {current && (
+                <motion.img
+                  key={current.url}
+                  src={current.url}
+                  alt={current.caption}
+                  initial={{ opacity: 0, scale: 0.98 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.35 }}
+                  className="max-h-[78vh] w-full object-contain"
+                />
+              )}
+            </AnimatePresence>
+            {images.length > 1 && (
+              <>
+                <button
+                  onClick={() => step(-1)}
+                  className="absolute left-3 grid h-11 w-11 place-items-center rounded-full bg-white/10 backdrop-blur transition-colors hover:bg-white/25"
+                  aria-label="Previous image"
+                >
+                  <ChevronLeft className="h-5 w-5" />
+                </button>
+                <button
+                  onClick={() => step(1)}
+                  className="absolute right-3 grid h-11 w-11 place-items-center rounded-full bg-white/10 backdrop-blur transition-colors hover:bg-white/25"
+                  aria-label="Next image"
+                >
+                  <ChevronRight className="h-5 w-5" />
+                </button>
+              </>
+            )}
+            <button
+              onClick={() => setLightbox(null)}
+              className="absolute right-3 top-3 grid h-10 w-10 place-items-center rounded-full bg-white/10 backdrop-blur transition-colors hover:bg-white/25"
+              aria-label="Close"
+            >
+              <X className="h-5 w-5" />
+            </button>
+          </div>
+          <div className="flex items-center justify-between gap-4 px-5 py-4">
+            <p className="text-sm text-white/80">{current?.caption}</p>
+            <p className="shrink-0 font-mono text-xs text-white/50">
+              {(lightbox ?? 0) + 1} / {images.length}
+            </p>
+          </div>
+        </DialogContent>
+      </Dialog>
     </section>
   );
 };
