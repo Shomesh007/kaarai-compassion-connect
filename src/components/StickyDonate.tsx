@@ -1,41 +1,42 @@
-import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "framer-motion";
 import { Heart } from "lucide-react";
+import { scrollToId } from "@/lib/navigation";
 
+/** Floating donate pill that appears after the hero and hides near the donate/footer areas. */
 const StickyDonate = () => {
-  const [isVisible, setIsVisible] = useState(false);
+  const { scrollY } = useScroll();
+  const [visible, setVisible] = useState(false);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrolled = window.scrollY;
-      setIsVisible(scrolled > 300);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  const scrollToDonate = () => {
-    const element = document.getElementById('donate');
-    element?.scrollIntoView({ behavior: "smooth" });
-  };
+  useMotionValueEvent(scrollY, "change", (y) => {
+    const donate = document.getElementById("donate");
+    const footer = document.querySelector("footer");
+    const vh = window.innerHeight;
+    const overDonate = donate ? donate.getBoundingClientRect().top < vh && donate.getBoundingClientRect().bottom > 0 : false;
+    const overFooter = footer ? footer.getBoundingClientRect().top < vh : false;
+    setVisible(y > vh * 0.8 && !overDonate && !overFooter);
+  });
 
   return (
-    <div
-      className={`fixed bottom-4 right-4 z-50 transition-all duration-300 ${
-        isVisible ? "translate-y-0 opacity-100" : "translate-y-20 opacity-0 pointer-events-none"
-      }`}
-    >
-      <Button
-        variant="donate"
-        size="lg"
-        onClick={scrollToDonate}
-        className="shadow-[var(--shadow-strong)] hover:shadow-[var(--shadow-hover)] gap-2 animate-glow rounded-full px-6"
-      >
-        <Heart className="w-5 h-5" fill="currentColor" />
-        <span className="font-bold">Donate</span>
-      </Button>
-    </div>
+    <AnimatePresence>
+      {visible && (
+        <motion.button
+          initial={{ opacity: 0, y: 40, scale: 0.8 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: 40, scale: 0.8 }}
+          transition={{ type: "spring", stiffness: 300, damping: 24 }}
+          onClick={() => scrollToId("donate")}
+          className="fixed bottom-5 right-5 z-40 inline-flex items-center gap-2 rounded-full bg-accent py-3 pl-3 pr-6 font-semibold text-accent-foreground shadow-[0_20px_40px_-12px_hsl(var(--accent)/0.7)] animate-glow"
+          aria-label="Donate"
+        >
+          <span className="relative grid h-9 w-9 place-items-center rounded-full bg-white/20">
+            <span className="absolute inset-0 animate-pulse-ring rounded-full bg-white/30" />
+            <Heart className="relative h-4 w-4" fill="currentColor" />
+          </span>
+          Donate
+        </motion.button>
+      )}
+    </AnimatePresence>
   );
 };
 
