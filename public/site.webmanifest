@@ -1,0 +1,14 @@
+{
+  "name": "Kaarai Karangal",
+  "short_name": "Kaarai Karangal",
+  "description": "Social service organization serving communities across Tamil Nadu and Puducherry.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#faf7f2",
+  "theme_color": "#0f4c4a",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}
