@@ -9,7 +9,7 @@ export default function SponsorsSection() {
   if (list.length === 0) return null;
 
   return (
-    <section id="sponsors" className="relative py-24 sm:py-28">
+    <section id="sponsors" className="relative py-14 md:py-24 lg:py-28">
       <div className="mx-auto max-w-7xl px-5 sm:px-8">
         <SectionHeading
           eyebrow="Supporting sponsors"
@@ -21,24 +21,24 @@ export default function SponsorsSection() {
           description="Local businesses and institutions who stand with us to serve the community."
         />
       </div>
-      <Reveal className="mt-14">
+      <Reveal className="mt-8 md:mt-14">
         <Marquee duration={Math.max(list.length * 6, 30)}>
           {list.map((sponsor) => {
             const card = (
-              <div className="mx-3 flex h-36 w-56 flex-col items-center justify-center gap-3 rounded-3xl border border-border/70 bg-card px-6 shadow-[var(--shadow-soft)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-hover)] sm:w-64">
-                <div className="grid h-16 w-full place-items-center">
+              <div className="mx-2 flex h-28 w-44 flex-col items-center justify-center gap-2 rounded-2xl md:mx-3 md:h-36 md:rounded-3xl md:gap-3 border border-border/70 bg-card px-6 shadow-[var(--shadow-soft)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-hover)] sm:w-64">
+                <div className="grid h-12 w-full place-items-center md:h-16">
                   {sponsor.logo_url ? (
                     <img
                       src={sponsor.logo_url}
                       alt={`${sponsor.name} logo`}
                       loading="lazy"
-                      className="max-h-16 max-w-[10rem] object-contain grayscale-[30%] transition duration-300 hover:grayscale-0"
+                      className="max-h-12 max-w-[8rem] object-contain md:max-h-16 md:max-w-[10rem] grayscale-[30%] transition duration-300 hover:grayscale-0"
                     />
                   ) : (
                     <span className="font-display text-2xl text-muted-foreground">{sponsor.name.charAt(0)}</span>
                   )}
                 </div>
-                <span className="text-center text-sm font-semibold text-foreground">{sponsor.name}</span>
+                <span className="line-clamp-1 text-center text-xs font-semibold text-foreground md:text-sm">{sponsor.name}</span>
               </div>
             );
             return sponsor.website_url ? (

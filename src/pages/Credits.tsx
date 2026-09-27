@@ -18,8 +18,9 @@ import {
 import Navbar from "@/components/layout/Navbar";
 import Footer, { CREDIT_URL } from "@/components/Footer";
 import { EASE_OUT } from "@/components/motion/variants";
-import { Reveal, Stagger, StaggerItem } from "@/components/motion/Reveal";
+import { Reveal } from "@/components/motion/Reveal";
 import { useSiteSettings } from "@/hooks/use-cms";
+import SwipeRow from "@/components/motion/SwipeRow";
 
 const contributions = [
   { icon: Palette, title: "Brand & UI design", text: "Visual language, colour system, typography and every layout on the site." },
@@ -61,7 +62,7 @@ const Credits = () => {
 
       <main>
         {/* Hero */}
-        <section className="grain relative overflow-hidden bg-[var(--gradient-hero)] pb-20 pt-36 sm:pb-28 sm:pt-44">
+        <section className="grain relative overflow-hidden bg-[var(--gradient-hero)] pb-16 pt-28 sm:pb-28 sm:pt-44">
           <div className="pointer-events-none absolute inset-0 bg-kolam [mask-image:radial-gradient(ellipse_60%_60%_at_50%_30%,#000,transparent)]" />
           <div className="pointer-events-none absolute -left-24 top-24 h-96 w-96 animate-blob rounded-full bg-primary/15 blur-[90px]" />
           <div className="pointer-events-none absolute -right-24 top-40 h-96 w-96 animate-blob rounded-full bg-accent/15 blur-[90px]" style={{ animationDelay: "-8s" }} />
@@ -79,7 +80,7 @@ const Credits = () => {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.9, ease: EASE_OUT, delay: 0.1 }}
-              className="mt-5 font-display text-5xl font-medium leading-[1.02] tracking-tight text-balance sm:text-7xl"
+              className="mt-4 font-display text-[2.6rem] font-medium leading-[1.02] tracking-tight text-balance sm:text-7xl md:mt-5"
             >
               Made with care, for a cause that <em className="text-accent">cares</em>.
             </motion.h1>
@@ -87,7 +88,7 @@ const Credits = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: EASE_OUT, delay: 0.25 }}
-              className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground"
+              className="mx-auto mt-4 max-w-2xl text-base text-muted-foreground md:mt-6 md:text-lg"
             >
               The people, studio and tools that brought the {orgName} website to life.
             </motion.p>
@@ -98,7 +99,7 @@ const Credits = () => {
         <section className="relative -mt-8 pb-20 sm:pb-28">
           <div className="mx-auto max-w-7xl px-5 sm:px-8">
             <Reveal>
-              <div className="relative overflow-hidden rounded-[2.5rem] bg-ink p-8 text-white shadow-[var(--shadow-strong)] sm:p-14">
+              <div className="relative overflow-hidden rounded-[2rem] bg-ink p-6 text-white shadow-[var(--shadow-strong)] sm:p-14 md:rounded-[2.5rem]">
                 <div className="pointer-events-none absolute inset-0 bg-kolam-light opacity-50" />
                 <div className="pointer-events-none absolute -right-32 -top-32 h-[28rem] w-[28rem] rounded-full bg-primary/40 blur-[120px]" />
                 <div className="pointer-events-none absolute -bottom-32 -left-20 h-96 w-96 rounded-full bg-accent/30 blur-[120px]" />
@@ -115,7 +116,7 @@ const Credits = () => {
                       </span>
                       <span className="mt-2 block h-px w-0 bg-saffron transition-all duration-700 group-hover:w-full" />
                     </a>
-                    <p className="mt-8 max-w-2xl text-lg leading-relaxed text-white/70">
+                    <p className="mt-5 max-w-2xl text-base leading-relaxed text-white/70 md:mt-8 md:text-lg">
                       This entire website — its design, motion, code, content management system and deployment — was
                       conceived and crafted by <strong className="text-white">builtbygsv.in</strong>, proudly supporting{" "}
                       {orgName}’s mission to make compassion visible.
@@ -126,7 +127,7 @@ const Credits = () => {
                       href={CREDIT_URL}
                       target="_blank"
                       rel="noopener"
-                      className="btn-shine group inline-flex h-14 items-center gap-3 rounded-full bg-white px-8 font-semibold text-ink transition-transform hover:-translate-y-0.5"
+                      className="btn-shine group flex w-full items-center justify-center gap-3 rounded-full bg-white px-8 py-4 font-semibold text-ink md:inline-flex md:h-14 md:w-auto md:py-0 transition-transform hover:-translate-y-0.5"
                     >
                       Visit www.builtbygsv.in
                       <ArrowUpRight className="h-5 w-5 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
@@ -136,27 +137,29 @@ const Credits = () => {
               </div>
             </Reveal>
 
-            <Stagger className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            <Reveal className="mt-5 md:mt-6">
+            <SwipeRow desktopClassName="md:grid-cols-2 lg:grid-cols-3" itemWidth="w-[78%]">
               {contributions.map(({ icon: Icon, title, text }) => (
-                <StaggerItem key={title}>
-                  <div className="surface group h-full p-7 transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-hover)]">
+                <div key={title} className="h-full">
+                  <div className="surface group h-full p-6 transition-all md:p-7 duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-hover)]">
                     <span className="grid h-12 w-12 place-items-center rounded-2xl bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
                       <Icon className="h-5 w-5" />
                     </span>
-                    <h2 className="mt-6 font-display text-2xl font-medium text-foreground">{title}</h2>
+                    <h2 className="mt-5 font-display text-xl font-medium text-foreground md:mt-6 md:text-2xl">{title}</h2>
                     <p className="mt-2 leading-relaxed text-muted-foreground">{text}</p>
                     <p className="mt-5 text-xs font-bold uppercase tracking-[0.18em] text-accent">by builtbygsv.in</p>
                   </div>
-                </StaggerItem>
+                </div>
               ))}
-            </Stagger>
+            </SwipeRow>
+            </Reveal>
           </div>
         </section>
 
         {/* Acknowledgements */}
-        <section className="bg-secondary/40 py-20 sm:py-28">
-          <div className="mx-auto grid max-w-7xl gap-6 px-5 sm:px-8 lg:grid-cols-3">
-            <Reveal className="surface p-8">
+        <section className="bg-secondary/40 py-14 md:py-20 lg:py-28">
+          <div className="mx-auto grid max-w-7xl gap-4 px-5 sm:px-8 md:gap-6 lg:grid-cols-3">
+            <Reveal className="surface p-6 md:p-8">
               <Camera className="h-6 w-6 text-accent" />
               <h2 className="mt-5 font-display text-2xl font-medium">Content &amp; photography</h2>
               <p className="mt-3 leading-relaxed text-muted-foreground">
@@ -164,7 +167,7 @@ const Credits = () => {
                 are trademarks of their respective owners.
               </p>
             </Reveal>
-            <Reveal delay={0.08} className="surface p-8">
+            <Reveal delay={0.08} className="surface p-6 md:p-8">
               <Type className="h-6 w-6 text-accent" />
               <h2 className="mt-5 font-display text-2xl font-medium">Typography</h2>
               <p className="mt-3 leading-relaxed text-muted-foreground">
@@ -172,7 +175,7 @@ const Credits = () => {
                 <span className="font-tamil">Noto Serif Tamil</span>, served via Google Fonts.
               </p>
             </Reveal>
-            <Reveal delay={0.16} className="surface p-8">
+            <Reveal delay={0.16} className="surface p-6 md:p-8">
               <Code2 className="h-6 w-6 text-accent" />
               <h2 className="mt-5 font-display text-2xl font-medium">Built with open source</h2>
               <ul className="mt-4 flex flex-wrap gap-2">

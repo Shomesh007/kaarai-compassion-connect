@@ -6,6 +6,7 @@ import { useImpactCategories } from "@/hooks/use-cms";
 import SectionHeading from "@/components/motion/SectionHeading";
 import { EASE_OUT } from "@/components/motion/variants";
 import { cn } from "@/lib/utils";
+import SwipeRow from "@/components/motion/SwipeRow";
 
 const Gallery = () => {
   const { data: impactCategories } = useImpactCategories();
@@ -35,7 +36,7 @@ const Gallery = () => {
   const current = lightbox !== null ? images[lightbox] : null;
 
   return (
-    <section id="gallery" className="relative py-24 sm:py-32">
+    <section id="gallery" className="relative py-14 md:py-24 lg:py-32">
       <div className="mx-auto max-w-7xl px-5 sm:px-8">
         <SectionHeading
           eyebrow="Our impact"
@@ -48,8 +49,8 @@ const Gallery = () => {
         />
 
         {/* Category tabs */}
-        <div className="no-scrollbar -mx-5 mt-12 overflow-x-auto px-5">
-          <div role="tablist" className="mx-auto flex w-max gap-1 rounded-full border border-border/70 bg-card p-1.5 shadow-[var(--shadow-soft)]">
+        <div className="no-scrollbar -mx-5 mt-7 overflow-x-auto px-5 md:mt-12">
+          <div role="tablist" className="flex w-max gap-1 md:mx-auto rounded-full border border-border/70 bg-card p-1.5 shadow-[var(--shadow-soft)]">
             {categories.map((c) => {
               const selected = c.id === active.id;
               return (
@@ -59,7 +60,7 @@ const Gallery = () => {
                   aria-selected={selected}
                   onClick={() => setActiveId(c.id)}
                   className={cn(
-                    "relative whitespace-nowrap rounded-full px-5 py-2.5 text-sm font-semibold transition-colors",
+                    "relative whitespace-nowrap rounded-full px-4 py-2 text-xs font-semibold transition-colors md:px-5 md:py-2.5 md:text-sm",
                     selected ? "text-primary-foreground" : "text-muted-foreground hover:text-foreground",
                   )}
                 >
@@ -86,9 +87,27 @@ const Gallery = () => {
             transition={{ duration: 0.5, ease: EASE_OUT }}
           >
             {active.description && (
-              <p className="mx-auto mt-6 max-w-2xl text-center text-muted-foreground">{active.description}</p>
+              <p className="mt-4 max-w-2xl text-sm text-muted-foreground md:mx-auto md:mt-6 md:text-center md:text-base">{active.description}</p>
             )}
-            <div className="mt-10 columns-2 gap-3 sm:gap-4 lg:columns-3">
+            {/* Phones: swipeable photo cards */}
+            <SwipeRow className="mt-5 md:hidden" itemWidth="w-[78%]">
+              {images.map((image, i) => (
+                <button
+                  key={image.id ?? i}
+                  onClick={() => setLightbox(i)}
+                  className="relative block aspect-[4/5] w-full overflow-hidden rounded-3xl bg-muted text-left"
+                >
+                  <img src={image.url} alt={image.caption} loading="lazy" className="h-full w-full object-cover" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-ink/85 via-transparent to-transparent" />
+                  <span className="absolute left-3 top-3 rounded-full bg-ink/50 px-2.5 py-1 font-mono text-[0.65rem] text-white backdrop-blur">
+                    {i + 1}/{images.length}
+                  </span>
+                  <p className="absolute inset-x-0 bottom-0 p-4 text-sm font-medium leading-snug text-white">{image.caption}</p>
+                </button>
+              ))}
+            </SwipeRow>
+
+            <div className="mt-10 hidden columns-2 gap-3 sm:gap-4 md:block lg:columns-3">
               {images.map((image, i) => (
                 <motion.button
                   key={image.id ?? i}

@@ -16,12 +16,12 @@ function EventCard({ event, index }: { event: CMSEvent; index: number }) {
     <Reveal delay={index * 0.08}>
       <article className="surface group grid overflow-hidden md:grid-cols-[14rem_1fr]">
         {/* Date tile */}
-        <div className="relative flex items-center gap-5 overflow-hidden bg-gradient-to-br from-accent to-saffron p-7 text-white md:flex-col md:items-start md:justify-between md:p-8">
+        <div className="relative flex items-center gap-5 overflow-hidden bg-gradient-to-br from-accent to-saffron justify-between px-5 py-4 text-white md:flex-col md:items-start md:p-8">
           <div className="pointer-events-none absolute inset-0 bg-kolam-light" />
           {valid ? (
             <div className="relative">
-              <p className="font-display text-7xl font-medium leading-none md:text-8xl">{date.getDate()}</p>
-              <p className="mt-2 text-sm font-bold uppercase tracking-[0.2em]">
+              <p className="font-display text-5xl font-medium leading-none md:text-8xl">{date.getDate()}</p>
+              <p className="mt-1 text-xs font-bold uppercase tracking-[0.2em] md:mt-2 md:text-sm">
                 {date.toLocaleDateString("en-IN", { month: "long" })} {date.getFullYear()}
               </p>
             </div>
@@ -34,8 +34,8 @@ function EventCard({ event, index }: { event: CMSEvent; index: number }) {
         </div>
 
         {/* Details */}
-        <div className="p-7 sm:p-10">
-          <div className="flex flex-wrap gap-2 text-sm">
+        <div className="p-5 sm:p-10">
+          <div className="flex flex-wrap gap-2 text-xs md:text-sm">
             <span className="inline-flex items-center gap-1.5 rounded-full bg-accent/10 px-3 py-1 font-semibold text-accent">
               <CalendarDays className="h-4 w-4" />
               {event.date_display}
@@ -45,14 +45,14 @@ function EventCard({ event, index }: { event: CMSEvent; index: number }) {
               {event.location}
             </span>
           </div>
-          <h3 className="mt-5 font-display text-3xl font-medium leading-tight tracking-tight text-foreground text-balance sm:text-4xl">
+          <h3 className="mt-4 font-display text-2xl font-medium leading-tight tracking-tight text-foreground text-balance sm:text-4xl md:mt-5">
             {event.title}
           </h3>
           <div className="relative">
             <div
               className={cn(
-                "prose prose-neutral mt-5 max-w-none text-foreground/80 prose-p:leading-relaxed prose-strong:text-foreground prose-li:my-0.5 transition-[max-height] duration-700",
-                open ? "max-h-[2000px]" : "max-h-44 overflow-hidden",
+                "prose prose-sm prose-neutral mt-4 max-w-none md:prose-base md:mt-5 text-foreground/80 prose-p:leading-relaxed prose-strong:text-foreground prose-li:my-0.5 transition-[max-height] duration-700",
+                open ? "max-h-[2000px]" : "max-h-28 overflow-hidden md:max-h-44",
               )}
               dangerouslySetInnerHTML={{ __html: event.description_html }}
             />
@@ -78,7 +78,7 @@ const UpcomingEvents = () => {
   if (items.length === 0) return null;
 
   return (
-    <section id="upcoming-events" className="relative py-24 sm:py-32">
+    <section id="upcoming-events" className="relative py-14 md:py-24 lg:py-32">
       <div className="mx-auto max-w-6xl px-5 sm:px-8">
         <SectionHeading
           eyebrow="Events"
@@ -89,7 +89,7 @@ const UpcomingEvents = () => {
           }
           description="Art, service and community — come be a part of what we do next."
         />
-        <div className="mt-14 space-y-8">
+        <div className="mt-8 space-y-6 md:mt-14 md:space-y-8">
           {items.map((event, i) => (
             <EventCard key={event.id} event={event} index={i} />
           ))}

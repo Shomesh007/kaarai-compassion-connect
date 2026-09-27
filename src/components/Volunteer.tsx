@@ -45,25 +45,35 @@ const Volunteer = () => {
   const phoneDisplay = settings?.phone_display ?? "+91 82205 73306";
 
   return (
-    <section id="volunteer" className="relative py-24 sm:py-32">
+    <section id="volunteer" className="relative py-14 md:py-24 lg:py-32">
       <div className="mx-auto max-w-7xl px-5 sm:px-8">
-        <div className="grid overflow-hidden rounded-[2rem] border border-border/70 bg-card shadow-[var(--shadow-strong)] lg:grid-cols-12">
+        <div className="-mx-2 grid overflow-hidden rounded-[1.75rem] border border-border/70 bg-card shadow-[var(--shadow-strong)] sm:mx-0 md:rounded-[2rem] lg:grid-cols-12">
           {/* Left panel */}
-          <div className="relative overflow-hidden bg-primary p-8 text-primary-foreground sm:p-12 lg:col-span-5">
+          <div className="relative overflow-hidden bg-primary p-6 text-primary-foreground sm:p-12 lg:col-span-5">
             <div className="pointer-events-none absolute inset-0 bg-kolam-light opacity-60" />
             <div className="pointer-events-none absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-saffron/40 blur-3xl" />
             <div className="relative flex h-full flex-col">
               <Reveal>
                 <span className="eyebrow text-saffron">Join our mission</span>
-                <h2 className="mt-4 font-display text-4xl font-medium leading-[1.05] tracking-tight sm:text-5xl">
+                <h2 className="mt-3 font-display text-[2rem] font-medium leading-[1.05] tracking-tight sm:text-5xl md:mt-4">
                   Lend a hand. <em className="text-saffron">Change a life.</em>
                 </h2>
-                <p className="mt-5 text-lg leading-relaxed text-white/75">
+                <p className="mt-3 text-sm leading-relaxed text-white/75 md:mt-5 md:text-lg">
                   Become a volunteer and help us make compassion visible in our communities.
                 </p>
               </Reveal>
 
-              <div className="mt-10 space-y-3">
+              {/* Phones: quick actions instead of contact cards */}
+              <div className="mt-5 grid grid-cols-2 gap-2 md:hidden">
+                <a href={`tel:${phoneTel}`} className="flex h-11 items-center justify-center gap-2 rounded-full bg-white/15 text-sm font-semibold">
+                  <Phone className="h-4 w-4" /> Call us
+                </a>
+                <a href={`mailto:${email}`} className="flex h-11 items-center justify-center gap-2 rounded-full bg-white/15 text-sm font-semibold">
+                  <Mail className="h-4 w-4" /> Email
+                </a>
+              </div>
+
+              <div className="mt-10 hidden space-y-3 md:block">
                 <a
                   href={`mailto:${email}`}
                   className="group flex items-center gap-4 rounded-2xl border border-white/15 bg-white/5 p-4 transition-colors hover:bg-white/10"
@@ -90,7 +100,7 @@ const Volunteer = () => {
                 </a>
               </div>
 
-              <div className="mt-auto pt-10">
+              <div className="mt-auto hidden pt-10 md:block">
                 <div className="rounded-2xl bg-ink/40 p-5 backdrop-blur">
                   <p className="flex items-center gap-2 font-semibold">
                     <Handshake className="h-5 w-5 text-saffron" /> Partner with us
@@ -108,12 +118,12 @@ const Volunteer = () => {
           </div>
 
           {/* Form */}
-          <div className="p-8 sm:p-12 lg:col-span-7">
+          <div className="p-5 sm:p-12 lg:col-span-7">
             <Reveal>
-              <h3 className="font-display text-3xl font-medium text-foreground">Quick signup</h3>
-              <p className="mt-2 text-muted-foreground">Takes less than a minute. We’ll reach out with next steps.</p>
+              <h3 className="font-display text-2xl font-medium text-foreground md:text-3xl">Quick signup</h3>
+              <p className="mt-1 text-sm text-muted-foreground md:mt-2 md:text-base">Takes less than a minute. We’ll reach out with next steps.</p>
             </Reveal>
-            <form onSubmit={handleSubmit} className="mt-8 grid gap-5 sm:grid-cols-2">
+            <form onSubmit={handleSubmit} className="mt-5 grid gap-4 sm:grid-cols-2 md:mt-8 md:gap-5">
               <div className="space-y-2 sm:col-span-2">
                 <Label htmlFor="name">Full name *</Label>
                 <Input
@@ -179,7 +189,7 @@ const Volunteer = () => {
                   value={formData.interest}
                   onChange={(e) => setFormData({ ...formData, interest: e.target.value })}
                   placeholder="Tell us how you'd like to help"
-                  className="min-h-24 rounded-xl border-border/80 bg-background/60 px-4 py-3 text-base focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-0"
+                  className="min-h-20 rounded-xl border-border/80 bg-background/60 px-4 py-3 text-base focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-0"
                 />
               </div>
               <div className="sm:col-span-2">
@@ -190,6 +200,12 @@ const Volunteer = () => {
                   Become a Volunteer
                   <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
                 </button>
+                <a
+                  href={`mailto:${email}?subject=Partnership Inquiry`}
+                  className="mt-4 flex items-center justify-center gap-1.5 text-sm font-semibold text-primary md:hidden"
+                >
+                  <Handshake className="h-4 w-4" /> Organization? Partner with us
+                </a>
               </div>
             </form>
           </div>

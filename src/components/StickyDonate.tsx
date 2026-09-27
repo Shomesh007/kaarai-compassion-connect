@@ -26,7 +26,7 @@ const StickyDonate = () => {
           exit={{ opacity: 0, y: 40, scale: 0.8 }}
           transition={{ type: "spring", stiffness: 300, damping: 24 }}
           onClick={() => scrollToId("donate")}
-          className="fixed bottom-5 right-5 z-40 inline-flex items-center gap-2 rounded-full bg-accent py-3 pl-3 pr-6 font-semibold text-accent-foreground shadow-[0_20px_40px_-12px_hsl(var(--accent)/0.7)] animate-glow"
+          className="fixed bottom-5 right-5 z-40 hidden md:inline-flex items-center gap-2 rounded-full bg-accent py-3 pl-3 pr-6 font-semibold text-accent-foreground shadow-[0_20px_40px_-12px_hsl(var(--accent)/0.7)] animate-glow"
           aria-label="Donate"
         >
           <span className="relative grid h-9 w-9 place-items-center rounded-full bg-white/20">

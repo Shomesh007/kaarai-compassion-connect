@@ -16,6 +16,7 @@ import UpcomingEvents from "@/components/UpcomingEvents";
 import LatestUpdates from "@/components/LatestUpdates";
 import MediaShowcase from "@/components/MediaShowcase";
 import Team from "@/components/Team";
+import MobileNav from "@/components/layout/MobileNav";
 import { scrollToId } from "@/lib/navigation";
 
 const Index = () => {
@@ -48,6 +49,7 @@ const Index = () => {
       </main>
       <Footer />
       <StickyDonate />
+      <MobileNav />
     </div>
   );
 };

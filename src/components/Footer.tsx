@@ -27,24 +27,24 @@ const Footer = () => {
       <div className="pointer-events-none absolute -top-40 left-1/4 h-96 w-96 rounded-full bg-primary/30 blur-[120px]" />
 
       {/* CTA band */}
-      <div className="relative mx-auto max-w-7xl px-5 pt-20 sm:px-8 sm:pt-28">
-        <Reveal className="flex flex-col items-start justify-between gap-10 border-b border-white/10 pb-16 lg:flex-row lg:items-end">
+      <div className="relative mx-auto max-w-7xl px-5 pt-14 sm:px-8 md:pt-28">
+        <Reveal className="flex flex-col items-start justify-between gap-7 border-b border-white/10 pb-10 md:gap-10 md:pb-16 lg:flex-row lg:items-end">
           <div>
-            <p className="font-tamil text-xl text-saffron sm:text-2xl">{taglineTamil}</p>
-            <h2 className="mt-4 max-w-3xl font-display text-4xl font-medium leading-[1.05] tracking-tight sm:text-6xl">
+            <p className="font-tamil text-lg text-saffron sm:text-2xl">{taglineTamil}</p>
+            <h2 className="mt-3 max-w-3xl font-display text-[2rem] font-medium leading-[1.05] tracking-tight sm:text-6xl md:mt-4">
               {motto}
             </h2>
           </div>
-          <div className="flex flex-col gap-3 sm:flex-row">
+          <div className="grid w-full grid-cols-2 gap-2.5 sm:flex sm:w-auto sm:gap-3">
             <button
               onClick={() => goTo("donate")}
-              className="btn-shine inline-flex h-14 items-center justify-center gap-2 rounded-full bg-accent px-8 font-semibold text-accent-foreground"
+              className="btn-shine inline-flex h-12 items-center justify-center gap-2 rounded-full bg-accent px-8 font-semibold text-accent-foreground md:h-14"
             >
               <Heart className="h-5 w-5" fill="currentColor" /> Donate
             </button>
             <button
               onClick={() => goTo("volunteer")}
-              className="inline-flex h-14 items-center justify-center rounded-full border border-white/20 px-8 font-semibold transition-colors hover:bg-white hover:text-ink"
+              className="inline-flex h-12 items-center justify-center rounded-full border border-white/20 px-8 font-semibold md:h-14 transition-colors hover:bg-white hover:text-ink"
             >
               Volunteer
             </button>
@@ -53,7 +53,7 @@ const Footer = () => {
       </div>
 
       {/* Columns */}
-      <div className="relative mx-auto grid max-w-7xl gap-12 px-5 py-16 sm:px-8 md:grid-cols-2 lg:grid-cols-12">
+      <div className="relative mx-auto grid max-w-7xl gap-9 px-5 py-10 sm:px-8 md:grid-cols-2 md:gap-12 md:py-16 lg:grid-cols-12">
         <div className="lg:col-span-4">
           <Link to="/" className="flex items-center gap-3">
             <span className="grid h-12 w-12 place-items-center overflow-hidden rounded-full bg-white">
@@ -90,7 +90,7 @@ const Footer = () => {
 
         <nav className="lg:col-span-3" aria-label="Footer">
           <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-white/40">Explore</h3>
-          <ul className="mt-5 grid grid-cols-2 gap-x-4 gap-y-3 text-sm lg:grid-cols-1">
+          <ul className="mt-4 grid grid-cols-3 gap-x-4 gap-y-3 text-sm md:mt-5 md:grid-cols-2 lg:grid-cols-1">
             {NAV_LINKS.map((l) => (
               <li key={l.id}>
                 <button onClick={() => goTo(l.id)} className="text-white/70 transition-colors hover:text-saffron">
@@ -128,7 +128,7 @@ const Footer = () => {
 
       {/* Bottom bar */}
       <div className="relative border-t border-white/10">
-        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-5 py-6 text-sm text-white/50 sm:px-8 md:flex-row">
+        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 px-5 pb-28 pt-6 text-center text-xs text-white/50 sm:px-8 md:flex-row md:pb-6 md:text-sm">
           <p>
             © {new Date().getFullYear()} {orgName}. All rights reserved.
           </p>

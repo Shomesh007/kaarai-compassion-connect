@@ -28,7 +28,7 @@ export default function SectionHeading({
       whileInView="show"
       viewport={{ once: true, amount: 0.4 }}
       variants={{ hidden: {}, show: { transition: { staggerChildren: 0.1 } } }}
-      className={cn("max-w-3xl", centered && "mx-auto text-center", className)}
+      className={cn("max-w-3xl", centered && "md:mx-auto md:text-center", className)}
     >
       <motion.span
         variants={{ hidden: { opacity: 0, y: 12 }, show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: EASE_OUT } } }}
@@ -39,7 +39,7 @@ export default function SectionHeading({
       <motion.h2
         variants={{ hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: EASE_OUT } } }}
         className={cn(
-          "mt-4 font-display text-4xl font-medium leading-[1.05] tracking-tight text-balance sm:text-5xl md:text-6xl",
+          "mt-3 font-display text-[2.1rem] font-medium leading-[1.05] tracking-tight text-balance sm:text-5xl md:mt-4 md:text-6xl",
           tone === "dark" ? "text-white" : "text-foreground",
         )}
       >
@@ -49,9 +49,9 @@ export default function SectionHeading({
         <motion.p
           variants={{ hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: EASE_OUT } } }}
           className={cn(
-            "mt-5 text-base leading-relaxed sm:text-lg",
+            "mt-3 text-[0.95rem] leading-relaxed md:mt-5 md:text-lg",
             tone === "dark" ? "text-white/65" : "text-muted-foreground",
-            centered && "mx-auto max-w-2xl",
+            centered && "md:mx-auto md:max-w-2xl",
           )}
         >
           {description}

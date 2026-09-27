@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { AnimatePresence, motion, useMotionValueEvent, useScroll, useSpring } from "framer-motion";
 import { Heart, Menu, X } from "lucide-react";
 import { useSiteSettings } from "@/hooks/use-cms";
@@ -10,6 +10,7 @@ import { EASE_OUT } from "@/components/motion/variants";
 const Navbar = () => {
   const { data: settings } = useSiteSettings();
   const goTo = useGoToSection();
+  const { pathname } = useLocation();
   const { scrollY, scrollYProgress } = useScroll();
   const progress = useSpring(scrollYProgress, { stiffness: 140, damping: 30, restDelta: 0.001 });
 
@@ -32,6 +33,8 @@ const Navbar = () => {
   }, [open]);
 
   const orgName = settings?.org_name ?? "Kaarai Karangal";
+  // On phones the home hero is a dark photo, so the bar starts light-on-dark
+  const overPhoto = pathname === "/" && !scrolled && !open;
 
   const handleNav = (id: string) => {
     setOpen(false);
@@ -69,7 +72,12 @@ const Navbar = () => {
                 className="h-9 w-9 object-contain"
               />
             </span>
-            <span className="truncate font-display text-lg font-semibold tracking-tight text-foreground">
+            <span
+              className={cn(
+                "truncate font-display text-lg font-semibold tracking-tight",
+                overPhoto ? "text-white md:text-foreground" : "text-foreground",
+              )}
+            >
               {orgName}
             </span>
           </Link>
@@ -98,7 +106,12 @@ const Navbar = () => {
             </button>
             <button
               onClick={() => setOpen((v) => !v)}
-              className="grid h-11 w-11 place-items-center rounded-full border border-border/70 bg-background/70 text-foreground backdrop-blur lg:hidden"
+              className={cn(
+                "grid h-11 w-11 place-items-center rounded-full border backdrop-blur lg:hidden",
+                overPhoto
+                  ? "border-white/25 bg-white/10 text-white md:border-border/70 md:bg-background/70 md:text-foreground"
+                  : "border-border/70 bg-background/70 text-foreground",
+              )}
               aria-label={open ? "Close menu" : "Open menu"}
               aria-expanded={open}
             >

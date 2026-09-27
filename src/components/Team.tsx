@@ -1,4 +1,7 @@
+import { useState } from "react";
+import { motion } from "framer-motion";
 import { Crown } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { useTeamMembers } from "@/hooks/use-cms";
 import SectionHeading from "@/components/motion/SectionHeading";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion/Reveal";
@@ -24,10 +27,18 @@ const Team = () => {
   const ecMembers = all.filter((m) => m.category === "ec_member");
   const [head, ...leaders] = leadership;
 
+  const [tab, setTab] = useState<"leaders" | "advisors" | "ec">("leaders");
+
   if (all.length === 0) return null;
 
+  const tabs = [
+    { id: "leaders" as const, label: "Office bearers", count: leaders.length },
+    { id: "advisors" as const, label: "Advisors", count: advisors.length },
+    { id: "ec" as const, label: "EC", count: ecMembers.length },
+  ].filter((t) => t.count > 0);
+
   return (
-    <section id="team" className="relative overflow-hidden bg-secondary/40 py-24 sm:py-32">
+    <section id="team" className="relative overflow-hidden bg-secondary/40 py-14 md:py-24 lg:py-32">
       <div className="pointer-events-none absolute inset-0 bg-kolam opacity-30" />
       <div className="relative mx-auto max-w-7xl px-5 sm:px-8">
         <SectionHeading
@@ -40,6 +51,76 @@ const Team = () => {
           description="Office bearers, advisors and executive committee members who give their time to serve."
         />
 
+        {/* Phones: compact president card + tabs */}
+        <div className="mt-8 md:hidden">
+          {head && (
+            <Reveal>
+              <div className="relative flex items-center gap-4 overflow-hidden rounded-2xl bg-primary p-4 text-primary-foreground">
+                <div className="pointer-events-none absolute inset-0 bg-kolam-light opacity-60" />
+                <span className="relative grid h-12 w-12 shrink-0 place-items-center rounded-full bg-white/15 text-saffron">
+                  <Crown className="h-5 w-5" />
+                </span>
+                <div className="relative min-w-0">
+                  <p className="text-[0.65rem] font-bold uppercase tracking-[0.2em] text-white/70">{head.role}</p>
+                  <p className="mt-0.5 font-display text-base font-medium leading-snug">{head.name}</p>
+                </div>
+              </div>
+            </Reveal>
+          )}
+
+          <div role="tablist" className="mt-5 grid grid-cols-3 gap-1 rounded-full border border-border/70 bg-card p-1">
+            {tabs.map((t) => (
+              <button
+                key={t.id}
+                role="tab"
+                aria-selected={tab === t.id}
+                onClick={() => setTab(t.id)}
+                className={cn("relative rounded-full py-2 text-xs font-semibold", tab === t.id ? "text-primary-foreground" : "text-muted-foreground")}
+              >
+                {tab === t.id && <motion.span layoutId="team-tab" className="absolute inset-0 rounded-full bg-primary" transition={{ type: "spring", stiffness: 380, damping: 32 }} />}
+                <span className="relative">
+                  {t.label} <span className="opacity-60">{t.count}</span>
+                </span>
+              </button>
+            ))}
+          </div>
+
+          <motion.div key={tab} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }} className="mt-4">
+            {tab === "leaders" ? (
+              <div className="no-scrollbar -mx-5 grid snap-x snap-mandatory auto-cols-[78%] grid-flow-col grid-rows-2 gap-2.5 overflow-x-auto scroll-px-5 px-5">
+                {leaders.map((m, i) => (
+                  <div key={m.id} className="surface flex snap-start items-center gap-3 rounded-2xl p-3">
+                    <span className={`grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-gradient-to-br font-display text-lg font-semibold text-white ${gradients[i % gradients.length]}`}>
+                      {monogram(m.name)}
+                    </span>
+                    <div className="min-w-0">
+                      <p className="truncate text-[0.62rem] font-bold uppercase tracking-[0.14em] text-accent">{m.role}</p>
+                      <p className="truncate text-sm font-semibold text-foreground">{m.name}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <ul className="flex flex-wrap gap-2">
+                {(tab === "advisors" ? advisors : ecMembers).map((m) => (
+                  <li
+                    key={m.id}
+                    className={cn(
+                      "rounded-full px-3.5 py-1.5 text-sm font-medium",
+                      tab === "advisors" ? "bg-primary/10 text-primary" : "bg-accent/10 text-accent",
+                    )}
+                  >
+                    {m.name}
+                  </li>
+                ))}
+              </ul>
+            )}
+            {tab === "leaders" && <p className="mt-3 text-center text-xs text-muted-foreground">Swipe to see all office bearers →</p>}
+          </motion.div>
+        </div>
+
+        {/* Tablet & desktop */}
+        <div className="hidden md:block">
         {head && (
           <Reveal className="mx-auto mt-14 max-w-3xl">
             <div className="relative overflow-hidden rounded-3xl bg-primary p-8 text-center text-primary-foreground shadow-[var(--shadow-strong)] sm:p-10">
@@ -93,6 +174,7 @@ const Team = () => {
                 </ul>
               </Reveal>
             ))}
+        </div>
         </div>
       </div>
     </section>

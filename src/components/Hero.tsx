@@ -1,11 +1,157 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { AnimatePresence } from "framer-motion";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
-import { ArrowDown, ArrowRight, Droplet, Heart, MapPin, ShieldCheck, Sparkles } from "lucide-react";
+import { ArrowDown, ArrowRight, Camera, Droplet, Heart, MapPin, ShieldCheck, Sparkles } from "lucide-react";
+import type { ImpactImage } from "@/lib/cms-types";
 import { allImpactImageUrls } from "@/lib/impactData";
 import { useImpactCategories, useServices, useSiteSettings } from "@/hooks/use-cms";
 import { scrollToId } from "@/lib/navigation";
 import Marquee from "@/components/motion/Marquee";
 import { EASE_OUT } from "@/components/motion/variants";
+
+
+const SLIDE_MS = 5000;
+
+/** Phone-only hero: full-screen, stories-style photo slideshow with the tagline over it. */
+function MobileHero({
+  slides,
+  tamilWords,
+  taglineEnglish,
+  orgName,
+}: {
+  slides: Pick<ImpactImage, "url" | "caption">[];
+  tamilWords: string[];
+  taglineEnglish: string;
+  orgName: string;
+}) {
+  const reduce = useReducedMotion();
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    if (slides.length < 2) return;
+    const t = window.setTimeout(() => setIndex((i) => (i + 1) % slides.length), SLIDE_MS);
+    return () => window.clearTimeout(t);
+  }, [index, slides.length]);
+
+  const go = (dir: 1 | -1) => setIndex((i) => (i + dir + slides.length) % slides.length);
+  const slide = slides[index];
+
+  return (
+    <section id="top" className="relative h-[100svh] min-h-[620px] overflow-hidden bg-ink text-white md:hidden">
+      {/* Photos */}
+      <AnimatePresence initial={false}>
+        {slide && (
+          <motion.img
+            key={slide.url}
+            src={slide.url}
+            alt={slide.caption}
+            initial={{ opacity: 0, scale: 1.15 }}
+            animate={{ opacity: 1, scale: reduce ? 1.05 : 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ opacity: { duration: 0.9 }, scale: { duration: SLIDE_MS / 1000 + 1, ease: "linear" } }}
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+        )}
+      </AnimatePresence>
+      <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/70 to-ink/20" />
+      <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-ink/80 to-transparent" />
+
+      {/* Tap zones (stories-style) */}
+      <button aria-label="Previous photo" onClick={() => go(-1)} className="absolute inset-y-0 left-0 z-10 w-1/3" />
+      <button
+        aria-label="Next photo"
+        onClick={() => go(1)}
+        className="absolute inset-y-0 right-0 z-10 w-1/3"
+      />
+
+      {/* Story progress */}
+      <div className="absolute inset-x-4 top-[5.25rem] z-20 flex gap-1.5">
+        {slides.map((s, i) => (
+          <span key={s.url} className="h-[3px] flex-1 overflow-hidden rounded-full bg-white/25">
+            {i < index && <span className="block h-full w-full bg-white" />}
+            {i === index && (
+              <motion.span
+                key={index}
+                className="block h-full bg-white"
+                initial={{ width: "0%" }}
+                animate={{ width: "100%" }}
+                transition={{ duration: SLIDE_MS / 1000, ease: "linear" }}
+              />
+            )}
+          </span>
+        ))}
+      </div>
+
+      {/* Copy */}
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 px-5 pb-28">
+        <AnimatePresence mode="wait">
+          <motion.p
+            key={slide?.url}
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+            className="mb-5 flex items-center gap-2 text-xs text-white/60"
+          >
+            <Camera className="h-3.5 w-3.5 shrink-0" />
+            <span className="line-clamp-1">{slide?.caption}</span>
+          </motion.p>
+        </AnimatePresence>
+
+        <motion.span
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2, duration: 0.6 }}
+          className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-[0.7rem] font-semibold backdrop-blur-md"
+        >
+          <ShieldCheck className="h-3.5 w-3.5 text-saffron" /> Registered NGO · Karaikal
+        </motion.span>
+
+        <h1 className="mt-4 font-tamil text-[2.35rem] font-bold leading-[1.28]">
+          {tamilWords.map((word, i) => (
+            <motion.span
+              key={`${word}-${i}`}
+              initial={{ opacity: 0, y: 24, filter: "blur(8px)" }}
+              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+              transition={{ duration: 0.8, ease: EASE_OUT, delay: 0.3 + i * 0.12 }}
+              className={`mr-[0.25em] inline-block ${i === 1 || i === 3 ? "text-saffron" : ""}`}
+            >
+              {word}
+            </motion.span>
+          ))}
+        </h1>
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.9, duration: 0.8 }}
+          className="mt-2 font-display text-lg italic text-white/80"
+        >
+          {taglineEnglish}.
+        </motion.p>
+
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.05, duration: 0.7, ease: EASE_OUT }}
+          className="pointer-events-auto mt-6 grid grid-cols-2 gap-2.5"
+        >
+          <button
+            onClick={() => scrollToId("donate")}
+            className="btn-shine inline-flex h-12 items-center justify-center gap-2 rounded-full bg-accent text-sm font-semibold text-accent-foreground shadow-[0_12px_30px_-10px_hsl(var(--accent)/0.9)]"
+          >
+            <Heart className="h-4 w-4" fill="currentColor" /> Donate
+          </button>
+          <button
+            onClick={() => scrollToId("volunteer")}
+            className="inline-flex h-12 items-center justify-center rounded-full border border-white/30 bg-white/10 text-sm font-semibold backdrop-blur-md"
+          >
+            Volunteer
+          </button>
+        </motion.div>
+        <p className="sr-only">{orgName}</p>
+      </div>
+    </section>
+  );
+}
 
 const Hero = () => {
   const { data: settings } = useSiteSettings();
@@ -46,15 +192,19 @@ const Hero = () => {
   const smallImage = cats[0]?.images[3]?.url ?? "/img/id4.jpg";
 
   const orgName = settings?.org_name ?? "Kaarai Karangal";
+  // One or two strong photos per category for the phone slideshow
+  const slides = cats.flatMap((c) => c.images.slice(0, 2)).slice(0, 6);
   const taglineTamil = settings?.tagline_tamil ?? "யாதும் ஊரே யாவரும் கேளிர்";
   const taglineEnglish = settings?.tagline_english ?? "All towns are our home, all people our kin";
   const tamilWords = taglineTamil.split(" ");
 
   return (
+    <>
+    <MobileHero slides={slides.length ? slides : [{ url: mainImage, caption: "" }]} tamilWords={tamilWords} taglineEnglish={taglineEnglish} orgName={orgName} />
     <section
       ref={heroRef}
-      id="top"
-      className="grain relative flex min-h-[100svh] flex-col overflow-hidden bg-[var(--gradient-hero)] pt-28"
+      id="top-desktop"
+      className="grain relative hidden min-h-[100svh] flex-col overflow-hidden bg-[var(--gradient-hero)] pt-28 md:flex"
     >
       {/* Ambient background */}
       <div className="pointer-events-none absolute inset-0 bg-kolam [mask-image:radial-gradient(ellipse_70%_60%_at_30%_40%,#000,transparent)]" />
@@ -239,18 +389,19 @@ const Hero = () => {
         </span>
       </motion.button>
 
+    </section>
       {/* Programs ribbon */}
-      <div className="relative z-10 border-y border-white/10 bg-ink py-4 text-white">
+      <div className="relative z-10 border-y border-white/10 bg-ink py-3 text-white md:py-4">
         <Marquee duration={36}>
           {(services ?? []).map((s) => (
-            <span key={s.id} className="flex items-center gap-8 pr-8 font-display text-xl italic sm:text-2xl">
+            <span key={s.id} className="flex items-center gap-8 pr-8 font-display text-lg italic md:text-2xl">
               {s.title}
               <Sparkles className="h-4 w-4 text-saffron" />
             </span>
           ))}
         </Marquee>
       </div>
-    </section>
+    </>
   );
 };
 

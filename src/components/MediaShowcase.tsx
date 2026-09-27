@@ -94,7 +94,7 @@ const MediaShowcase = () => {
     <section
       ref={sectionRef}
       id="media-showcase"
-      className="relative overflow-hidden bg-ink px-5 py-24 sm:px-8 sm:py-32"
+      className="relative overflow-hidden bg-ink px-5 py-14 sm:px-8 md:py-24 lg:py-32"
     >
       {/* Ambient glow behind the spotlight */}
       <div
@@ -124,7 +124,7 @@ const MediaShowcase = () => {
             </>
           }
           description="Images and videos capturing our journey of service and compassion."
-          className="mb-14"
+          className="mb-8 md:mb-14"
         />
 
         {/* Spotlight / Hero area */}
@@ -151,7 +151,7 @@ const MediaShowcase = () => {
 
           {/* Main display */}
           <div
-            className="relative aspect-[4/5] sm:aspect-[16/9] md:aspect-[2.2/1] rounded-[2rem] overflow-hidden border border-white/10 cursor-pointer"
+            className="relative aspect-[4/3] sm:aspect-[16/9] md:aspect-[2.2/1] rounded-3xl md:rounded-[2rem] overflow-hidden border border-white/10 cursor-pointer"
             onClick={() => setLightboxOpen(true)}
             style={{
               boxShadow:
@@ -197,7 +197,7 @@ const MediaShowcase = () => {
             )}
 
             {/* Bottom gradient overlay with title */}
-            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-6 md:p-8">
+            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-4 md:p-8">
               <div className="flex items-center gap-2 mb-2">
                 {activeItem?.media_type === "video" ? (
                   <Film className="w-4 h-4 text-accent" />
@@ -224,7 +224,7 @@ const MediaShowcase = () => {
         </Reveal>
 
         {/* Filmstrip thumbnails */}
-        <div className="mt-6 relative">
+        <div className="mt-4 relative md:mt-6">
           <div
             ref={stripRef}
             className="flex gap-3 overflow-x-auto pb-2 px-1 scrollbar-hide"
@@ -234,7 +234,7 @@ const MediaShowcase = () => {
               <button
                 key={item.id}
                 onClick={() => selectItem(idx)}
-                className={`relative flex-shrink-0 w-20 h-14 md:w-28 md:h-20 rounded-xl overflow-hidden border-2 transition-all duration-300 ${
+                className={`relative flex-shrink-0 w-16 h-12 md:w-28 md:h-20 rounded-xl overflow-hidden border-2 transition-all duration-300 ${
                   idx === activeIndex
                     ? "border-saffron ring-2 ring-saffron/30 scale-105"
                     : "border-white/10 hover:border-white/30 opacity-60 hover:opacity-100"

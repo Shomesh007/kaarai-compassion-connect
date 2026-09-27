@@ -23,7 +23,7 @@ const Donate = () => {
   let offset = 0;
 
   return (
-    <section id="donate" className="relative overflow-hidden py-24 sm:py-32">
+    <section id="donate" className="relative overflow-hidden py-14 md:py-24 lg:py-32">
       <div className="pointer-events-none absolute left-1/2 top-0 h-[30rem] w-[60rem] -translate-x-1/2 rounded-full bg-accent/10 blur-[120px]" />
       <div className="relative mx-auto max-w-7xl px-5 sm:px-8">
         <SectionHeading
@@ -36,11 +36,12 @@ const Donate = () => {
           description="Every rupee goes toward serving those in need. Here’s exactly how your donation helps."
         />
 
-        <div className="mt-16 grid gap-6 lg:grid-cols-12">
+        <div className="mt-8 grid gap-4 md:mt-16 md:gap-6 lg:grid-cols-12">
           {/* Breakdown */}
-          <Reveal className="surface flex flex-col p-8 sm:p-10 lg:col-span-7">
+          <Reveal className="surface flex flex-col p-5 sm:p-10 lg:col-span-7">
             <div className="grid flex-1 items-center gap-10 sm:grid-cols-[auto_1fr]">
-              <div className="relative mx-auto h-48 w-48">
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground sm:hidden">Where your gift goes</p>
+              <div className="relative mx-auto hidden h-48 w-48 sm:block">
                 <svg viewBox="0 0 180 180" className="h-full w-full -rotate-90">
                   <circle cx="90" cy="90" r={radius} fill="none" stroke="hsl(var(--muted))" strokeWidth="18" />
                   {items.map((item, idx) => {
@@ -73,7 +74,7 @@ const Donate = () => {
                 </div>
               </div>
 
-              <ul className="space-y-5">
+              <ul className="-mt-6 space-y-4 sm:mt-0 sm:space-y-5">
                 {items.map((item, idx) => (
                   <li key={item.id ?? idx}>
                     <div className="flex items-center justify-between gap-3 text-sm">
@@ -97,12 +98,12 @@ const Donate = () => {
                 ))}
               </ul>
             </div>
-            <div className="mt-10 grid gap-4 border-t border-border/70 pt-8 sm:grid-cols-2">
-              <p className="flex items-start gap-3 text-sm text-muted-foreground">
+            <div className="mt-6 grid gap-3 border-t border-border/70 pt-5 sm:mt-10 sm:grid-cols-2 sm:gap-4 sm:pt-8">
+              <p className="flex items-start gap-3 text-xs text-muted-foreground sm:text-sm">
                 <ShieldCheck className="h-5 w-5 shrink-0 text-primary" />
                 Complete transparency and accountability in every rupee spent.
               </p>
-              <p className="flex items-start gap-3 text-sm text-muted-foreground">
+              <p className="flex items-start gap-3 text-xs text-muted-foreground sm:text-sm">
                 <Heart className="h-5 w-5 shrink-0 text-accent" />
                 Every contribution goes directly toward serving those in need.
               </p>
@@ -110,33 +111,33 @@ const Donate = () => {
           </Reveal>
 
           {/* CTA card */}
-          <Reveal delay={0.1} className="relative overflow-hidden rounded-3xl bg-ink p-8 text-white shadow-[var(--shadow-strong)] sm:p-10 lg:col-span-5">
+          <Reveal delay={0.1} className="relative overflow-hidden rounded-3xl bg-ink p-5 text-white shadow-[var(--shadow-strong)] sm:p-10 lg:col-span-5">
             <div className="pointer-events-none absolute inset-0 bg-kolam-light opacity-60" />
             <div className="pointer-events-none absolute -bottom-24 -right-24 h-72 w-72 rounded-full bg-accent/40 blur-3xl" />
             <div className="relative flex h-full flex-col">
-              <div className="flex items-start gap-4 rounded-2xl border border-white/10 bg-white/5 p-5">
+              <div className="flex items-start gap-3 rounded-2xl border border-white/10 bg-white/5 p-4 md:gap-4 md:p-5">
                 <ShieldCheck className="h-6 w-6 shrink-0 text-saffron" />
                 <div>
                   <p className="font-semibold">Registered NGO</p>
-                  <p className="mt-1 text-sm text-white/60">
+                  <p className="mt-1 text-xs text-white/60 md:text-sm">
                     {settings?.registration_info ?? "Registration No. 31/2025 — Registered on fourth february 2025"}
                   </p>
                 </div>
               </div>
-              <p className="mt-8 text-sm font-semibold uppercase tracking-widest text-white/50">UPI or bank transfer</p>
-              <p className="mt-2 font-display text-3xl font-medium leading-tight">Contact us for payment details — we’ll guide you through.</p>
-              <div className="mt-auto flex flex-col gap-3 pt-10">
+              <p className="mt-6 text-xs font-semibold uppercase tracking-widest text-white/50 md:mt-8 md:text-sm">UPI or bank transfer</p>
+              <p className="mt-2 font-display text-xl font-medium leading-tight md:text-3xl">Contact us for payment details — we’ll guide you through.</p>
+              <div className="mt-auto grid grid-cols-2 gap-2.5 pt-6 md:flex md:flex-col md:gap-3 md:pt-10">
                 <a
                   href={`mailto:${email}?subject=Donation Inquiry`}
-                  className="btn-shine inline-flex h-14 items-center justify-center gap-2 rounded-full bg-accent px-6 font-semibold text-accent-foreground transition-transform hover:-translate-y-0.5"
+                  className="btn-shine inline-flex h-12 items-center justify-center gap-2 rounded-full bg-accent px-4 text-sm font-semibold md:h-14 md:px-6 md:text-base text-accent-foreground transition-transform hover:-translate-y-0.5"
                 >
-                  <Mail className="h-5 w-5" /> Donate via email
+                  <Mail className="h-5 w-5" /> <span className="md:hidden">Email</span><span className="hidden md:inline">Donate via email</span>
                 </a>
                 <a
                   href={`tel:${phoneTel}`}
-                  className="inline-flex h-14 items-center justify-center gap-2 rounded-full border border-white/20 px-6 font-semibold transition-colors hover:bg-white hover:text-ink"
+                  className="inline-flex h-12 items-center justify-center gap-2 rounded-full border border-white/20 px-4 text-sm font-semibold md:h-14 md:px-6 md:text-base transition-colors hover:bg-white hover:text-ink"
                 >
-                  <Phone className="h-5 w-5" /> Call {phoneDisplay}
+                  <Phone className="h-5 w-5" /> <span className="md:hidden">Call</span><span className="hidden md:inline">Call {phoneDisplay}</span>
                 </a>
               </div>
             </div>

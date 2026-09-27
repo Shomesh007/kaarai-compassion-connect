@@ -5,6 +5,8 @@ import { useImpactCategories, useServices, useSiteSettings, useSponsors, useTeam
 import SectionHeading from "@/components/motion/SectionHeading";
 import CountUp from "@/components/motion/CountUp";
 import { EASE_OUT } from "@/components/motion/variants";
+import SwipeRow from "@/components/motion/SwipeRow";
+import { cn } from "@/lib/utils";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion/Reveal";
 
 const pillars = [
@@ -32,10 +34,10 @@ const About = () => {
   ];
 
   return (
-    <section id="about" className="relative overflow-hidden py-24 sm:py-32">
-      <div className="mx-auto grid max-w-7xl gap-16 px-5 sm:px-8 lg:grid-cols-12 lg:gap-12">
+    <section id="about" className="relative overflow-hidden py-14 md:py-24 lg:py-32">
+      <div className="mx-auto grid max-w-7xl gap-6 px-5 sm:px-8 md:gap-16 lg:grid-cols-12 lg:gap-12">
         {/* Left: heading + photo */}
-        <div className="lg:col-span-5">
+        <div className="min-w-0 lg:col-span-5">
           <SectionHeading
             align="left"
             eyebrow="Who we are"
@@ -68,9 +70,14 @@ const About = () => {
         </div>
 
         {/* Right: story */}
-        <div className="lg:col-span-7 lg:pt-24">
+        <div className="min-w-0 lg:col-span-7 lg:pt-24">
           <Reveal>
-            <p className="font-display text-xl leading-snug text-foreground sm:text-[1.75rem] sm:leading-[1.4]">
+            <p
+              className={cn(
+                "font-display text-lg leading-snug text-foreground sm:text-[1.75rem] sm:leading-[1.4]",
+                !isExpanded && "line-clamp-4 md:line-clamp-none",
+              )}
+            >
               {settings?.about_intro}
             </p>
           </Reveal>
@@ -107,7 +114,7 @@ const About = () => {
             <Reveal delay={0.1}>
               <button
                 onClick={() => setIsExpanded((v) => !v)}
-                className="group mt-8 inline-flex items-center gap-3 text-sm font-semibold text-foreground"
+                className="group mt-5 md:mt-8 inline-flex items-center gap-3 text-sm font-semibold text-foreground"
                 aria-expanded={isExpanded}
               >
                 <span className="grid h-10 w-10 place-items-center rounded-full border border-foreground/20 transition-colors group-hover:border-primary group-hover:bg-primary group-hover:text-primary-foreground">
@@ -118,30 +125,34 @@ const About = () => {
             </Reveal>
           )}
 
-          <Stagger className="mt-14 grid gap-4 sm:grid-cols-3">
-            {pillars.map(({ icon: Icon, title, text }) => (
-              <StaggerItem key={title} className="surface group p-6 transition-shadow hover:shadow-[var(--shadow-hover)]">
-                <span className="grid h-11 w-11 place-items-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
-                  <Icon className="h-5 w-5" />
-                </span>
-                <h3 className="mt-5 font-semibold text-foreground">{title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{text}</p>
-              </StaggerItem>
-            ))}
-          </Stagger>
+          <Reveal className="mt-8 md:mt-14">
+            <SwipeRow desktopClassName="md:grid-cols-3" itemWidth="w-[72%]">
+              {pillars.map(({ icon: Icon, title, text }) => (
+                <div key={title} className="surface group flex h-full gap-4 p-5 transition-shadow hover:shadow-[var(--shadow-hover)] md:block md:p-6">
+                  <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
+                    <Icon className="h-5 w-5" />
+                  </span>
+                  <div>
+                    <h3 className="font-semibold text-foreground md:mt-5">{title}</h3>
+                    <p className="mt-1 text-sm leading-relaxed text-muted-foreground md:mt-2">{text}</p>
+                  </div>
+                </div>
+              ))}
+            </SwipeRow>
+          </Reveal>
         </div>
       </div>
 
       {/* Stats */}
-      <div className="mx-auto mt-20 max-w-7xl px-5 sm:px-8">
+      <div className="mx-auto mt-10 max-w-7xl px-5 sm:px-8 md:mt-20">
         <Stagger className="grid grid-cols-2 overflow-hidden rounded-3xl border border-border/70 bg-card lg:grid-cols-4">
           {stats.map((s, i) => (
             <StaggerItem
               key={s.label}
-              className={`p-6 sm:p-10 ${i % 2 === 0 ? "border-r" : ""} ${i < 2 ? "border-b lg:border-b-0" : ""} lg:border-r lg:last:border-r-0 border-border/70`}
+              className={`p-5 sm:p-10 ${i % 2 === 0 ? "border-r" : ""} ${i < 2 ? "border-b lg:border-b-0" : ""} lg:border-r lg:last:border-r-0 border-border/70`}
             >
-              <CountUp to={s.value} suffix={s.suffix} className="font-display text-5xl font-medium text-primary sm:text-6xl" />
-              <p className="mt-2 text-sm font-medium text-muted-foreground">{s.label}</p>
+              <CountUp to={s.value} suffix={s.suffix} className="font-display text-4xl font-medium text-primary sm:text-6xl" />
+              <p className="mt-1 text-xs font-medium text-muted-foreground sm:mt-2 sm:text-sm">{s.label}</p>
             </StaggerItem>
           ))}
         </Stagger>
